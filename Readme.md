@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Иван Суслов](https://up.htmlacademy.ru/php/9/user/488893).
-* Наставник: `Неизвестно`.
+* Наставник: [Алексей Новиков](https://up.htmlacademy.ru/php/9/user/42641).
 
 ---
 
