@@ -45,3 +45,37 @@ function include_template(string $name, array $data = []): string {
 
   return $result;
 }
+
+/**
+ * Получить количество секунд до полуночи следующего дня.
+ * @return /DateInterval оставщееся время до полуночи.
+ */
+function get_time_to_tomorow() {
+  $nex_day = date_create('tomorrow');
+  $curr_day = date_create('now');
+  $diff = date_diff($curr_day, $nex_day);
+  return $diff;
+}
+
+/**
+ * Получает оставшиеся время до полуночи и приводит его в читабельный формат H:I
+ * @return string Строка с оставшимся временем до полуночи.
+ */
+function get_timer_format() {
+  $time_count = get_time_to_tomorow();
+  $time_string = date_interval_format($time_count, "%H:%I");
+  return $time_string;
+};
+
+/**
+ * Получает оставшиеся время до полуночи и формирует класс finishing если время до полуночи менее часа.
+ * @return string наименование класса.
+ */
+function get_class_finishing() {
+  $time_count = get_time_to_tomorow();
+  $hours = date_interval_format($time_count, "%H");
+  if ($hours < 1) {
+    return 'timer--finishing';
+  }
+  return '';
+};
