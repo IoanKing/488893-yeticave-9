@@ -14,6 +14,16 @@ function formattingAmount(float $number): string {
 };
 
 /**
+ * Защита от XSS атак. Проверка и удаление специсимволов для строки.
+ * @param string $str Обрабатываемая строка.
+ * @return string Обработанная строка.
+ */
+function esc(string $str): string {
+	$text = htmlspecialchars($str);
+	return $text;
+}
+
+/**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
  * @param string $name Путь к файлу шаблона относительно папки templates
  * @param array $data Ассоциативный массив с данными для шаблона
