@@ -5,7 +5,7 @@
  * @param float $number Число - текущая ставка аукциона по товару.
  * @return string Итогова строка с текстом ставки.
  */
-function formattingAmount(float $number): string {
+function amount_format(float $number): string {
     $rounded_number = ceil($number);
     if ($rounded_number <= 1000) {
         return $rounded_number.' ₽';
