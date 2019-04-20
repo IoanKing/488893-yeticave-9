@@ -1,3 +1,4 @@
+/* Добавление категорий */
 INSERT INTO cathegory (name, code) VALUES
     ('Доски и лыжи', 'boards'),
     ('Крепления', 'attachment'),
@@ -6,6 +7,7 @@ INSERT INTO cathegory (name, code) VALUES
     ('Инструменты', 'tools'),
     ('Разное', 'other');
 
+/* Добавление новых пользователей */
 INSERT INTO users (name, email, password, avatar, contact, date_registration) VALUES
     ('Иван', 'ivanov.ivan@mail.ru', 'u9AO#91#l6', 'avatar.jpg', 'Телефон: 8(999) 876-54-32', '2018-06-12 05:30'),
     ('Константин', 'petrov.konstantine@gmail.com', '&75ixo0)xM(q', 'avatar.jpg', 'Телефон: 8(654)123-55-33', '2019-04-03 11:24'),
@@ -14,6 +16,7 @@ INSERT INTO users (name, email, password, avatar, contact, date_registration) VA
     ('Игорь', 'igor1976@mail.ru', 'Ns2&6i1c*%S&FZmQ#7%q', 'avatar.jpg', 'Телефон: 8(555) 555-55-55', '2019-04-01 16:05'),
     ('Енакентий', 'hanter1234@gmail.com', '%A33xm*E*G9N&UBC8#7%q', 'avatar.jpg', 'Телефон: 8(666) 666-66-66', '2017-06-23 15:55');
 
+/* Добавление лотов */
 INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, category_id, create_date) VALUES
     (
          '2014 Rossignol District Snowboard',
@@ -76,6 +79,7 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
         DATE_SUB(NOW(), INTERVAL 7 HOUR)
     );
 
+/* Добавление ставок для лотов */
 INSERT INTO user_staf (lot_id, user_id, amount, staf_date) VALUES
     (1, 1, 12500, '2019-04-20 10:40'),
     (1, 2, 14000, '2019-04-20 10:25'),
@@ -87,8 +91,13 @@ INSERT INTO user_staf (lot_id, user_id, amount, staf_date) VALUES
     (1, 4, 17000, '2019-03-19 14:25'),
     (1, 5, 12400, '2019-03-19 10:02');
 
+/* Запрос на получение всех категорий*/
 SELECT * FROM cathegory;
 
+/*
+    Запрос на получение самых новых, открытых лотов (без даты окончания).
+    В результате запроса выводятся: название, стартовая цена, ссылка на изображение, текущая цена, название категории
+*/
 SELECT title, start_price, picture, IFNULL(MAX(s1.amount),start_price) price, c.name FROM lots l
     JOIN cathegory c ON l.category_id = c.id
     LEFT JOIN user_staf s1 ON s1.lot_id = l.id
@@ -97,13 +106,16 @@ SELECT title, start_price, picture, IFNULL(MAX(s1.amount),start_price) price, c.
     ORDER BY create_date DESC
     LIMIT 5;
 
+/* Запрос лота по его id. Также выводиться название категории, к которой принадлежит лот*/
 SELECT title, description, picture, start_price, staf_step, c.name cathegory FROM lots l
     JOIN cathegory c ON l.category_id = c.id
     WHERE l.id = 4;
 
+/* Обновление наименования лота по его id */
 UPDATE lots SET title = 'Новое наименование лота'
     WHERE id = 4;
 
+/* Запрос на получение списока самых свежих ставок для лота по его идентификатору */
 SELECT u.name, amount staff, staf_date FROM lots l
     JOIN user_staf s ON l.id = s.lot_id
     JOIN users u ON s.user_id = u.id
