@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?=esc($title_page)?></title>
+    <title><?=esc($title)?></title>
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
 </head>
@@ -53,11 +53,13 @@
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($cathegory as $key => $value): ?>
+            <?php if ($cathegory && $cathegory !== ""): ?>
+            <?php foreach ($cathegory as $value): ?>
             <li class="nav__item">
-                <a href="pages/all-lots.html"><?=esc($value)?></a>
+                <a class="promo__link" href="pages/all-lots.html"><?=esc($value['name'])?></a>
             </li>
             <?php endforeach; ?>
+            <?php endif;?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">
