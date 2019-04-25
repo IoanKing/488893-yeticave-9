@@ -1,9 +1,9 @@
 <?php
-
 /**
  * Форматирует ставку под формат вывода на карточке товара и возвращает подготовленую строку.
- * @param float $number Число - текущая ставка аукциона по товару.
- * @return string Итогова строка с текстом ставки.
+ *
+ * @param float $number - Число - текущая ставка аукциона по товару.
+ * @return string       - Итогова строка с текстом ставки.
  */
 function amount_format(float $number): string {
     $rounded_number = ceil($number);
@@ -15,8 +15,9 @@ function amount_format(float $number): string {
 
 /**
  * Защита от XSS атак. Проверка и удаление специсимволов для строки.
- * @param string $str Обрабатываемая строка.
- * @return string Обработанная строка.
+ *
+ * @param string $str - Обрабатываемая строка.
+ * @return string     - Обработанная строка.
  */
 function esc(string $str): string {
 	$text = htmlspecialchars($str);
@@ -25,9 +26,10 @@ function esc(string $str): string {
 
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
- * @param string $name Путь к файлу шаблона относительно папки templates
- * @param array $data Ассоциативный массив с данными для шаблона
- * @return string Итоговый HTML
+ *
+ * @param string $name  - Путь к файлу шаблона относительно папки templates
+ * @param array $data   - Ассоциативный массив с данными для шаблона
+ * @return string       - Итоговый HTML
  */
 function include_template(string $name, array $data = []): string {
   $name = 'templates/' . $name;
@@ -48,34 +50,78 @@ function include_template(string $name, array $data = []): string {
 
 /**
  * Получить количество секунд до полуночи следующего дня.
- * @return /DateInterval оставщееся время до полуночи.
+ *
+ * @param \DateTime $date   - Дата.
+ * @return \DateInterval - Оставщееся время до полуночи.
  */
-function get_time_to_tomorow() {
+function get_time_to_tomorow($date) {
+  $curr_date = DateTime::createFromFormat('Y-m-d H:i:s', $date);
   $nex_day = date_create('tomorrow');
-  $curr_day = date_create('now');
-  $diff = date_diff($curr_day, $nex_day);
+  $diff = date_diff($curr_date, $nex_day);
   return $diff;
 }
 
 /**
  * Получает оставшиеся время до полуночи и приводит его в читабельный формат H:I
- * @return string Строка с оставшимся временем до полуночи.
+ *
+ * @param \DateTime $date   - Дата.
+ * @return string - Строка с оставшимся временем до полуночи.
  */
-function get_timer_format() {
-  $time_count = get_time_to_tomorow();
-  $time_string = date_interval_format($time_count, "%H:%I");
-  return $time_string;
+function get_timer_format($date) {
+  $time_count = get_time_to_tomorow($date);
+  $minutes = date_interval_format($time_count, '%I');
+  $hours = date_interval_format($time_count, '%H');
+  $days = date_interval_format($time_count, '%a');
+  return strval($hours + $days*24).":".strval($minutes);
 };
 
 /**
  * Получает оставшиеся время до полуночи и формирует класс finishing если время до полуночи менее часа.
- * @return string наименование класса.
+ *
+ * @param \DateTime $date   - Дата.
+ * @return string - Наименование класса.
  */
-function get_class_finishing() {
-  $time_count = get_time_to_tomorow();
-  $hours = date_interval_format($time_count, "%H");
-  if ($hours < 1) {
+function get_class_finishing($date) {
+  $time_count = get_time_to_tomorow($date);
+  $hours = date_interval_format($time_count, '%H');
+  $days = date_interval_format($time_count, '%a');
+  if (($hours + $days*24) < 1) {
     return 'timer--finishing';
   }
   return '';
+};
+
+/**
+ * Формирует страницу отдаваемую пользователю.
+ *
+ * @param array $categories   - массив с категориями.
+ * @param string $content     - основной контент страницы.
+ * @param bool $is_auth       - признак авторизации пользователя.
+ * @param string $title       - название страницы.
+ * @param string $user_name   - имя  текущего пользователя.
+ */
+function render_page($categories, $content, $is_auth, $title, $user_name) {
+  $layout = include_template('layout.php', [
+    'cathegory' => $categories,
+    'content' => $content,
+    'is_auth' => $is_auth,
+    'title' => $title,
+    'user_name' => $user_name,
+  ]);
+  
+  print($layout);
+};
+
+/**
+ * Формирует страницу с ошибкой и прекращает выполнения сценария.
+ *
+ * @param string $error_text   - ошибка.
+ * @param bool $is_auth        - признак авторизации пользователя.
+ * @param string $title        - название страницы.
+ * @param string $user_name    - имя  текущего пользователя.
+ */
+function render_error_db($error_text, $is_auth, $title, $user_name) {
+  $content = include_template('error.php', ['error' => $error_text]);
+  render_page('', $content, $is_auth, $title, $user_name);
+  die();
 };
