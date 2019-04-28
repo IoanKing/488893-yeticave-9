@@ -12,7 +12,7 @@
 <header class="main-header">
     <div class="main-header__container container">
         <h1 class="visually-hidden">YetiCave</h1>
-        <a class="main-header__logo">
+        <a class="main-header__logo" href="/">
             <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
         </a>
         <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
@@ -43,20 +43,17 @@
         </nav>
     </div>
 </header>
-
-<main class="container">
   <?=$content?>
-</main>
 </div>
 
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <?php if ($cathegory && $cathegory !== ""): ?>
+            <?php if ($cathegory && !empty($cathegory)): ?>
             <?php foreach ($cathegory as $value): ?>
             <li class="nav__item">
-                <a class="promo__link" href="pages/all-lots.html"><?=esc($value['name'])?></a>
+                <a href="pages/all-lots.html"><?=esc($value['name'])?></a>
             </li>
             <?php endforeach; ?>
             <?php endif;?>

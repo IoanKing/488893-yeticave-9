@@ -24,8 +24,8 @@ if (gettype($adverts) !== "array") {
 
 $content = include_template(
   'index.php', [
-    'cathegory' => $categories ?? '',
-    'adverts' => $adverts ?? '',
+    'cathegory' => $categories ?? [],
+    'adverts' => $adverts ?? [],
   ]
 );
 
