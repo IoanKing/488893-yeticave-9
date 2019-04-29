@@ -23,7 +23,7 @@ CREATE TABLE lots (
     description TEXT(1200),
     picture CHAR(255),
     start_price INT(10) NOT NULL,
-    end_date TIMESTAMP,
+    end_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     staf_step INT(3) NOT NULL,
     user_id INT NOT NULL,
     winner_id INT,

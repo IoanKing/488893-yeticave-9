@@ -9,15 +9,15 @@ INSERT INTO cathegory (name, code) VALUES
 
 /* Добавление новых пользователей */
 INSERT INTO users (name, email, password, avatar, contact, date_registration) VALUES
-    ('Иван', 'ivanov.ivan@mail.ru', 'u9AO#91#l6', 'avatar.jpg', 'Телефон: 8(999) 876-54-32', '2018-06-12 05:30'),
-    ('Константин', 'petrov.konstantine@gmail.com', '&75ixo0)xM(q', 'avatar.jpg', 'Телефон: 8(654)123-55-33', '2019-04-03 11:24'),
-    ('Семён', 'sidorov85@rambler.ru', 'Ns2&UBC8#7%q', 'avatar.jpg', 'Телефон: 8(333) 457-12-34', '2019-01-01 01:00'),
-    ('Евгений', 'kirjacov76@rambler.ru', 'b&5B)t9*rOoi&UBC8#7%q', 'avatar.jpg', 'Телефон: 8(444) 444-44-44', '2019-01-01 01:00'),
-    ('Игорь', 'igor1976@mail.ru', 'Ns2&6i1c*%S&FZmQ#7%q', 'avatar.jpg', 'Телефон: 8(555) 555-55-55', '2019-04-01 16:05'),
-    ('Енакентий', 'hanter1234@gmail.com', '%A33xm*E*G9N&UBC8#7%q', 'avatar.jpg', 'Телефон: 8(666) 666-66-66', '2017-06-23 15:55');
+    ('Иван', 'ivanov.ivan@mail.ru', 'u9AO#91#l6', 'avatar.jpg', '8(999) 876-54-32', '2018-06-12 05:30'),
+    ('Константин', 'petrov.konstantine@gmail.com', '&75ixo0)xM(q', 'avatar.jpg', '8(654)123-55-33', '2019-04-03 11:24'),
+    ('Семён', 'sidorov85@rambler.ru', 'Ns2&UBC8#7%q', 'avatar.jpg', '8(333) 457-12-34', '2019-01-01 01:00'),
+    ('Евгений', 'kirjacov76@rambler.ru', 'b&5B)t9*rOoi&UBC8#7%q', 'avatar.jpg', '8(444) 444-44-44', '2019-01-01 01:00'),
+    ('Игорь', 'igor1976@mail.ru', 'Ns2&6i1c*%S&FZmQ#7%q', 'avatar.jpg', '8(555) 555-55-55', '2019-04-01 16:05'),
+    ('Енакентий', 'hanter1234@gmail.com', '%A33xm*E*G9N&UBC8#7%q', 'avatar.jpg', '8(666) 666-66-66', '2017-06-23 15:55');
 
 /* Добавление лотов */
-INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, category_id, create_date) VALUES
+INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, category_id, create_date, end_date) VALUES
     (
          '2014 Rossignol District Snowboard',
          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius accumsan ante sodales vulputate. Donec ornare orci eu aliquet molestie. Vivamus vestibulum porttitor rhoncus. Integer ultricies pharetra pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis in quam eget elementum. Integer quis nibh vel metus fermentum finibus. Nulla facilisi. Etiam nulla velit, maximus id facilisis nec, ornare sit amet turpis. Phasellus placerat condimentum sapien vitae semper. Pellentesque a diam cursus, luctus nunc eget, consequat odio. Ut consectetur risus sit amet commodo interdum. Nullam scelerisque volutpat nunc ut ultrices.',
@@ -26,7 +26,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
          12000,
          2,
          1,
-         DATE_SUB(NOW(), INTERVAL 16 HOUR)
+         DATE_SUB(NOW(), INTERVAL "0 16:00" DAY_MINUTE),
+         DATE_ADD(NOW(), INTERVAL "1 5:00" DAY_MINUTE)
      ),
     (
         'DC Ply Mens 2016/2017 Snowboard',
@@ -36,7 +37,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
         50000,
         1,
         1,
-        DATE_SUB(NOW(), INTERVAL 54 MINUTE)
+        DATE_SUB(NOW(), INTERVAL "0 0:54" DAY_MINUTE),
+        DATE_ADD(NOW(), INTERVAL "2 3:00" DAY_MINUTE)
     ),
     (
         'Крепления Union Contact Pro 2015 года размер L/XL',
@@ -46,7 +48,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
         1000,
         1,
         2,
-        DATE_SUB(NOW(), INTERVAL 10 HOUR)
+        DATE_SUB(NOW(), INTERVAL "0 1:10" DAY_MINUTE),
+        DATE_ADD(NOW(), INTERVAL "1 0:05" DAY_MINUTE)
     ),
     (
         'Ботинки для сноуборда DC Mutiny Charocal',
@@ -56,7 +59,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
         2000,
         3,
         3,
-        DATE_SUB(NOW(), INTERVAL 12 MINUTE)
+        DATE_SUB(NOW(), INTERVAL "0 0:12" DAY_MINUTE),
+        DATE_ADD(NOW(), INTERVAL "1 5:00" DAY_MINUTE)
     ),
     (
         'Куртка для сноуборда DC Mutiny Charocal',
@@ -66,7 +70,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
         2500,
         2,
         4,
-        DATE_SUB(NOW(), INTERVAL 2 DAY)
+        DATE_SUB(NOW(), INTERVAL "0 0:34" DAY_MINUTE),
+        DATE_ADD(NOW(), INTERVAL "1 10:00" DAY_MINUTE)
     ),
     (
         'Маска Oakley Canopy',
@@ -76,7 +81,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
         1500,
         2,
         6,
-        DATE_SUB(NOW(), INTERVAL 7 HOUR)
+        DATE_SUB(NOW(), INTERVAL "0 7:05" DAY_MINUTE),
+        DATE_ADD(NOW(), INTERVAL "1 0:15" DAY_MINUTE)
     );
 
 /* Добавление ставок для лотов */

@@ -3,23 +3,29 @@
   $query_template = [
     'cathegory' => 'SELECT id, name, code '
       .'FROM cathegory ',
-    'lot' => 'SELECT title, description, picture, start_price, staf_step, c.name AS cathegory, create_date '
+    'lot' => 'SELECT l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date '
       .'FROM lots AS l '
       .'JOIN cathegory AS c ON l.category_id = c.id '
-      .'WHERE end_date IS NULL '
+      .'WHERE end_date > NOW() OR end_date IS NULL '
       .'ORDER BY create_date DESC ',
-    'lot_full' => 'SELECT title, start_price, picture, IFNULL(MAX(s1.amount), start_price) AS price, c.name AS cathegory, create_date '
+    'lot_full' => 'SELECT l.id, title, start_price, picture, IFNULL(MAX(s1.amount), start_price) AS price, staf_step, c.name AS cathegory, end_date, description '
       .'FROM lots AS l '
       .'JOIN cathegory AS c ON l.category_id = c.id '
       .'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
-      .'WHERE end_date IS NULL '
-      .'GROUP BY title, start_price, picture, c.name, create_date '
-      .'ORDER BY create_date DESC '
-      .'LIMIT 5 ',
+      .'WHERE l.id = ? '
+      .'GROUP BY id, title, start_price, staf_step, picture, c.name, end_date, description '
+      .'ORDER BY create_date DESC ',
     'lot_by_id' => 'SELECT title, description, picture, start_price, staf_step, c.name AS cathegory '
       .'FROM lots AS l '
       .'JOIN cathegory AS c ON l.category_id = c.id '
       .'WHERE l.id = ? ',
+    'staf_history' => 'SELECT u.name, amount, staf_date '
+      .'FROM lots AS l '
+      .'JOIN user_staf s ON l.id = s.lot_id '
+      .'JOIN users u ON s.user_id = u.id '
+      .'WHERE l.id = ? '
+      .'ORDER BY staf_date DESC '
+      .'LIMIT 10 ',
   ];
   
   /**
@@ -97,6 +103,10 @@
    */
   function db_fetch_data($link, $sql, $data = []) {
     $result = [];
+    
+    if (is_string($data) || is_int($data)) {
+      $data = [$data];
+    }
   
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     

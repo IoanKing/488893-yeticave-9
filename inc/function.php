@@ -8,9 +8,9 @@
 function amount_format(float $number): string {
     $rounded_number = ceil($number);
     if ($rounded_number <= 1000) {
-        return $rounded_number.' ₽';
+        return $rounded_number;
     }
-    return number_format($rounded_number, 0, '', ' ').' ₽';
+    return number_format($rounded_number, 0, '', ' ');
 };
 
 /**
@@ -56,8 +56,8 @@ function include_template(string $name, array $data = []): string {
  */
 function get_time_to_tomorow($date) {
   $curr_date = DateTime::createFromFormat('Y-m-d H:i:s', $date);
-  $nex_day = date_create('tomorrow');
-  $diff = date_diff($curr_date, $nex_day);
+  $nex_day = date_create();
+  $diff = date_diff($nex_day, $curr_date);
   return $diff;
 }
 
@@ -84,8 +84,7 @@ function get_timer_format($date) {
 function get_class_finishing($date) {
   $time_count = get_time_to_tomorow($date);
   $hours = date_interval_format($time_count, '%H');
-  $days = date_interval_format($time_count, '%a');
-  if (($hours + $days*24) < 1) {
+  if (($hours) < 1) {
     return 'timer--finishing';
   }
   return '';
@@ -110,6 +109,7 @@ function render_page($categories, $content, $is_auth, $title, $user_name) {
   ]);
   
   print($layout);
+  die();
 };
 
 /**
@@ -122,6 +122,6 @@ function render_page($categories, $content, $is_auth, $title, $user_name) {
  */
 function render_error_db($error_text, $is_auth, $title, $user_name) {
   $content = include_template('error.php', ['error' => $error_text]);
-  render_page('', $content, $is_auth, $title, $user_name);
+  render_page([], $content, $is_auth, $title, $user_name);
   die();
 };
