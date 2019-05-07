@@ -11,36 +11,36 @@
       </ul>
     </nav>
     <section class="lot-item container">
-      <?php if (!empty($lots)): ?>
-      <h2><?=esc($lots['title'])?></h2>
+      <?php if (!empty($lot)): ?>
+      <h2><?=esc($lot['title'])?></h2>
       <div class="lot-item__content">
         <div class="lot-item__left">
           <div class="lot-item__image">
-            <img src="../img/<?=$lots['picture']?>" width="730" height="548" alt="Сноуборд">
+            <img src="/uploads/<?=$lot['picture']?>" width="730" height="548" alt="Сноуборд">
           </div>
-          <p class="lot-item__category">Категория: <span><?=$lots['cathegory']?></span></p>
+          <p class="lot-item__category">Категория: <span><?=$lot['cathegory']?></span></p>
           <p class="lot-item__description">
-              <?=$lots['description']?>
+              <?=$lot['description']?>
           </p>
         </div>
         <div class="lot-item__right">
           <div class="lot-item__state">
-            <div class="lot-item__timer timer <?=get_class_finishing($lots['end_date']);?>">
-              <?=get_timer_format($lots['end_date'])?>
+            <div class="lot-item__timer timer <?=get_class_finishing($lot['end_date']);?>">
+              <?=get_timer_format($lot['end_date'])?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?=amount_format(floatval($lots['price'])).' ₽'?></span>
+                <span class="lot-item__cost"><?=amount_format(floatval($lot['price'])).' ₽'?></span>
               </div>
               <div class="lot-item__min-cost">
-    Мин. ставка <span><?=amount_format(floatval($lots['staf_step'])).' ₽'?></span>
+    Мин. ставка <span><?=amount_format(floatval($lot['staf_step'])).' ₽'?></span>
               </div>
             </div>
             <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
               <p class="lot-item__form-item form__item form__item--invalid">
                 <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="<?=amount_format(floatval($lots['staf_step']))?>">
+                <input id="cost" type="text" name="cost" placeholder="<?=amount_format(floatval($lot['staf_step']))?>">
                 <span class="form__error">Введите наименование лота</span>
               </p>
               <button type="submit" class="button">Сделать ставку</button>

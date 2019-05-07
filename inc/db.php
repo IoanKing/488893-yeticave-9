@@ -26,6 +26,10 @@
       .'WHERE l.id = ? '
       .'ORDER BY staf_date DESC '
       .'LIMIT 10 ',
+    'create_lot' => 'INSERT '
+      .'INTO lots '
+      .'(title, description, picture, start_price, staf_step, user_id, category_id, create_date, end_date) VALUES '
+      .'(?, ?, ?, ?, ?, ?, ?, ?, ?) '
   ];
   
   /**
