@@ -26,12 +26,12 @@
     render_page($categories, $content, $is_auth, $title, $user_name);
   }
   
-  $lots = db_fetch_data($DB, $query_template['lot_full'], $id);
-  if (gettype($lots) !== "array") {
-    render_error_db($lots, $is_auth, $title, $user_name);
+  $lot = db_fetch_data($DB, $query_template['lot_full'], $id);
+  if (gettype($lot) !== "array") {
+    render_error_db($lot, $is_auth, $title, $user_name);
   }
   
-  if (count($lots) === 0) {
+  if (count($lot) === 0) {
     $content = include_template(
       '404.php', [
         'cathegory' => $categories ?? []
@@ -54,7 +54,7 @@
   $content = include_template(
     'lot.php', [
       'cathegory' => $categories ?? [],
-      'lots' => $lots[0] ?? [],
+      'lot' => $lot[0] ?? [],
       'staf_history' => $staf_history
     ]
   );

@@ -22,7 +22,7 @@
         <?php foreach ($adverts as $value): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
-                    <img src="/img/<?=esc($value['picture'])?>" width="350" height="260" alt="">
+                    <img src="/uploads/<?=esc($value['picture'])?>" width="350" height="260" alt="">
                 </div>
                 <div class="lot__info">
                     <span class="lot__category"><?=esc($value['cathegory'])?></span>
