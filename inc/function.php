@@ -1,130 +1,130 @@
 <?php
-/**
- * Форматирует ставку под формат вывода на карточке товара и возвращает подготовленую строку.
- *
- * @param float $number - Число - текущая ставка аукциона по товару.
- * @return string       - Итогова строка с текстом ставки.
- */
-function amount_format(float $number): string {
-    $rounded_number = ceil($number);
-    if ($rounded_number <= 1000) {
-        return $rounded_number;
-    }
-    return number_format($rounded_number, 0, '', ' ');
-};
-
-/**
- * Защита от XSS атак. Проверка и удаление специсимволов для строки.
- *
- * @param string $str - Обрабатываемая строка.
- * @return string     - Обработанная строка.
- */
-function esc(string $str): string {
-	$text = htmlspecialchars($str);
-	return $text;
-}
-
-/**
- * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
- *
- * @param string $name  - Путь к файлу шаблона относительно папки templates
- * @param array $data   - Ассоциативный массив с данными для шаблона
- * @return string       - Итоговый HTML
- */
-function include_template(string $name, array $data = []): string {
-  $name = 'templates/' . $name;
-  $result = '';
-
-  if (!is_readable($name)) {
-      return $result;
-  }
-
-  ob_start();
-  extract($data);
-  require $name;
-
-  $result = ob_get_clean();
-
-  return $result;
-}
-
-/**
- * Получить количество секунд до полуночи следующего дня.
- *
- * @param \DateTime $date   - Дата.
- * @return \DateInterval - Оставщееся время до полуночи.
- */
-function get_time_to_tomorow($date) {
-  $curr_date = DateTime::createFromFormat('Y-m-d H:i:s', $date);
-  $nex_day = date_create();
-  $diff = date_diff($nex_day, $curr_date);
-  return $diff;
-}
-
-/**
- * Получает оставшиеся время до полуночи и приводит его в читабельный формат H:I
- *
- * @param \DateTime $date   - Дата.
- * @return string - Строка с оставшимся временем до полуночи.
- */
-function get_timer_format($date) {
-  $time_count = get_time_to_tomorow($date);
-  $minutes = date_interval_format($time_count, '%I');
-  $hours = date_interval_format($time_count, '%H');
-  $days = date_interval_format($time_count, '%a');
-  return strval($hours + $days*24).":".strval($minutes);
-};
-
-/**
- * Получает оставшиеся время до полуночи и формирует класс finishing если время до полуночи менее часа.
- *
- * @param \DateTime $date   - Дата.
- * @return string - Наименование класса.
- */
-function get_class_finishing($date) {
-  $time_count = get_time_to_tomorow($date);
-  $hours = date_interval_format($time_count, '%H');
-  if (($hours) < 1) {
-    return 'timer--finishing';
-  }
-  return '';
-};
-
-/**
- * Формирует страницу отдаваемую пользователю.
- *
- * @param array $categories   - массив с категориями.
- * @param string $content     - основной контент страницы.
- * @param bool $is_auth       - признак авторизации пользователя.
- * @param string $title       - название страницы.
- * @param string $user_name   - имя  текущего пользователя.
- */
-function render_page(array $categories, string $content, bool $is_auth, string $title, string $user_name) {
-  $layout = include_template('layout.php', [
-    'cathegory' => $categories,
-    'content' => $content,
-    'is_auth' => $is_auth,
-    'title' => $title,
-    'user_name' => $user_name,
-  ]);
+  /**
+   * Форматирует ставку под формат вывода на карточке товара и возвращает подготовленую строку.
+   *
+   * @param float $number - Число - текущая ставка аукциона по товару.
+   * @return string       - Итогова строка с текстом ставки.
+   */
+  function amount_format(float $number): string {
+      $rounded_number = ceil($number);
+      if ($rounded_number <= 1000) {
+          return $rounded_number;
+      }
+      return number_format($rounded_number, 0, '', ' ');
+  };
   
-  print($layout);
-  exit;
-};
-
-/**
- * Формирует страницу с ошибкой и прекращает выполнения сценария.
- *
- * @param string $error_text   - ошибка.
- * @param bool $is_auth        - признак авторизации пользователя.
- * @param string $title        - название страницы.validation_add_lot
- * @param string $user_name    - имя  текущего пользователя.
- */
-function render_error_db(string $error_text, bool $is_auth, string $title, string $user_name) {
-  $content = include_template('error.php', ['error' => $error_text]);
-  render_page([], $content, $is_auth, $title, $user_name);
-  exit;
-};
+  /**
+   * Защита от XSS атак. Проверка и удаление специсимволов для строки.
+   *
+   * @param string $str - Обрабатываемая строка.
+   * @return string     - Обработанная строка.
+   */
+  function esc(string $str): string {
+    $text = htmlspecialchars($str);
+    return $text;
+  }
+  
+  /**
+   * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
+   *
+   * @param string $name  - Путь к файлу шаблона относительно папки templates
+   * @param array $data   - Ассоциативный массив с данными для шаблона
+   * @return string       - Итоговый HTML
+   */
+  function include_template(string $name, array $data = []): string {
+    $name = 'templates/' . $name;
+    $result = '';
+  
+    if (!is_readable($name)) {
+        return $result;
+    }
+  
+    ob_start();
+    extract($data);
+    require $name;
+  
+    $result = ob_get_clean();
+  
+    return $result;
+  }
+  
+  /**
+   * Получить количество секунд до полуночи следующего дня.
+   *
+   * @param \DateTime $date   - Дата.
+   * @return \DateInterval - Оставщееся время до полуночи.
+   */
+  function get_time_to_tomorow($date) {
+    $curr_date = DateTime::createFromFormat('Y-m-d H:i:s', $date);
+    $nex_day = date_create();
+    $diff = date_diff($nex_day, $curr_date);
+    return $diff;
+  }
+  
+  /**
+   * Получает оставшиеся время до полуночи и приводит его в читабельный формат H:I
+   *
+   * @param \DateTime $date   - Дата.
+   * @return string - Строка с оставшимся временем до полуночи.
+   */
+  function get_timer_format($date) {
+    $time_count = get_time_to_tomorow($date);
+    $minutes = date_interval_format($time_count, '%I');
+    $hours = date_interval_format($time_count, '%H');
+    $days = date_interval_format($time_count, '%a');
+    return strval($hours + $days*24).":".strval($minutes);
+  };
+  
+  /**
+   * Получает оставшиеся время до полуночи и формирует класс finishing если время до полуночи менее часа.
+   *
+   * @param \DateTime $date   - Дата.
+   * @return string - Наименование класса.
+   */
+  function get_class_finishing($date) {
+    $time_count = get_time_to_tomorow($date);
+    $hours = date_interval_format($time_count, '%H');
+    if (($hours) < 1) {
+      return 'timer--finishing';
+    }
+    return '';
+  };
+  
+  /**
+   * Формирует страницу отдаваемую пользователю.
+   *
+   * @param array $categories   - массив с категориями.
+   * @param string $content     - основной контент страницы.
+   * @param bool $is_auth       - признак авторизации пользователя.
+   * @param string $title       - название страницы.
+   * @param string $user_name   - имя  текущего пользователя.
+   */
+  function render_page(array $categories, string $content, bool $is_auth, string $title, string $user_name) {
+    $layout = include_template('layout.php', [
+      'cathegory' => $categories,
+      'content' => $content,
+      'is_auth' => $is_auth,
+      'title' => $title,
+      'user_name' => $user_name,
+    ]);
+    
+    print($layout);
+    exit;
+  };
+  
+  /**
+   * Формирует страницу с ошибкой и прекращает выполнения сценария.
+   *
+   * @param string $error_text   - ошибка.
+   * @param bool $is_auth        - признак авторизации пользователя.
+   * @param string $title        - название страницы.validation_add_lot
+   * @param string $user_name    - имя  текущего пользователя.
+   */
+  function render_error_db(string $error_text, bool $is_auth, string $title, string $user_name) {
+    $content = include_template('error.php', ['error' => $error_text]);
+    render_page([], $content, $is_auth, $title, $user_name);
+    exit;
+  };
   
   /**
    * Проверяет переданную дату на соответствие формату "ГГГГ-ММ-ДД"
@@ -153,7 +153,7 @@ function render_error_db(string $error_text, bool $is_auth, string $title, strin
    * @param array $file - Массив в данными файла.
    * @param string $key - наименование параметра.
    *
-   * @return bools
+   * @return boolean
    */
   function is_file_valid(array $file) {
     if (isset($file['name']) && !empty($file['name'])) {
@@ -165,6 +165,12 @@ function render_error_db(string $error_text, bool $is_auth, string $title, strin
     return false;
   }
   
+  /**
+   * Загружает файл на сервер.
+   *
+   * @param array  $file      - данные файла.
+   * @param string $filename  - новое имя файла.
+   */
   function uploaded_file(array $file, string $filename) {
     if (isset($file['name'])) {
       $tmp_name = $file['tmp_name'];
@@ -172,11 +178,14 @@ function render_error_db(string $error_text, bool $is_auth, string $title, strin
     }
   }
   
-  function rstrstr($haystack, $needle) {
-    return str_replace("/", ".", stristr($haystack, $needle));
-  }
-  
-  function get_file_type(string $mimetype) {
+  /**
+   * Получение расширения сохраняемого файла в зависимости от mime типа.
+   *
+   * @param string $mimetype - mime тип.
+   *
+   * @return string mixed - расширение файла.
+   */
+  function get_file_type(string $mimetype) : string {
     $types = [
       'image/png' => '.png',
       'image/jpeg' => '.jpg',
@@ -214,6 +223,49 @@ function render_error_db(string $error_text, bool $is_auth, string $title, strin
           $errors[$key] = empty($post[$key]);
           break;
       }
+    }
+    
+    return $errors;
+  }
+  
+  /**
+   * Валидация формы регистрации пользователя.
+   *
+   * @param       $DB   - данные подчклюения к БД.
+   * @param array $post - данные решистрации пользователя.
+   *
+   * @return array - массив с ошибками. При остусвтии ошибок возвращает пустой массив.
+   */
+  function validation_signup_lot($DB, array $post) : array {
+    $errors = [];
+  
+    if (!empty($post['email'])) {
+      if (filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
+        $sql = 'SELECT id '
+          . 'FROM users '
+          . 'WHERE email = ? ';
+        $check_email = db_fetch_data($DB, $sql, $post['email']);
+    
+        if (!empty($check_email)) {
+          $errors['email'] = 'Пользователь с данным email уже зарегистрирован.';
+        }
+      } else {
+        $errors['email'] = 'Введите корректный email.';
+      }
+    } else {
+      $errors['email'] = 'Введите email пользователя.';
+    }
+  
+    if (empty($post['name'])) {
+      $errors['name'] = 'Пользователь с данным email уже зарегистрирован.';
+    }
+  
+    if (empty($post['password'])) {
+      $errors['password'] = 'Введите пароль.';
+    }
+  
+    if (empty($post['message'])) {
+      $errors['message'] = 'Введите контактные сведения.';
     }
     
     return $errors;

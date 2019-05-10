@@ -1,6 +1,6 @@
 <h3>История ставок (<span><?=count($rates);?></span>)</h3>
 <table class="history__list">
-  <?php if ($rates && $rates !== ""): ?>
+  <?php if ($rates && !empty($rates)): ?>
     <?php foreach ($rates as $value): ?>
       <tr class="history__item">
         <td class="history__name"><?=$value['name']?></td>
