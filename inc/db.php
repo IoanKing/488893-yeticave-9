@@ -29,7 +29,14 @@
     'create_lot' => 'INSERT '
       .'INTO lots '
       .'(title, description, picture, start_price, staf_step, user_id, category_id, create_date, end_date) VALUES '
-      .'(?, ?, ?, ?, ?, ?, ?, ?, ?) '
+      .'(?, ?, ?, ?, ?, ?, ?, ?, ?) ',
+    'sign-up' => 'INSERT '
+      .'INTO users '
+      .'(name, email, password, avatar, contact, date_registration) VALUES '
+      .'(?, ?, ?, ?, ?, ?)',
+    'check_email' => 'SELECT id '
+      .'FROM users '
+      .'WHERE email = "?" ',
   ];
   
   /**
