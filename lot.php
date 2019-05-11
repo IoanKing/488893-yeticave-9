@@ -25,7 +25,7 @@
   
   $id = intval($_GET['id']);
   
-  if (empty($user_name)) {
+  if (empty($id)) {
     $content = include_template(
       '404.php', [
         'cathegory' => $categories ?? []
