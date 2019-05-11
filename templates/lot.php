@@ -37,6 +37,7 @@
     Мин. ставка <span><?=amount_format(floatval($lot['staf_step'])).' ₽'?></span>
               </div>
             </div>
+            <?php if (!empty($user_name)): ?>
             <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
               <p class="lot-item__form-item form__item form__item--invalid">
                 <label for="cost">Ваша ставка</label>
@@ -45,6 +46,7 @@
               </p>
               <button type="submit" class="button">Сделать ставку</button>
             </form>
+            <?php endif; ?>
           </div>
           <div class="history">
             <?=$staf_history?>

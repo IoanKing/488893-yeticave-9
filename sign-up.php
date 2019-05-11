@@ -3,19 +3,22 @@
   require_once(__DIR__.'\inc\function.php');
   require_once(__DIR__.'\inc\db.php');
   
+  session_start();
+  
   $DB = init_connection($DB_config['host'], $DB_config['user'], $DB_config['password'], $DB_config['DB']);
-  $path = __DIR__."\sign-up.php";
   $post = [];
   $error = [];
+  $user_name = '';
+  $title = 'Регистрация';
   
   if (!$DB) {
     $error = mysqli_connect_error();
-    render_error_db($error, $is_auth, $title, $user_name);
+    render_error_db($error, $title, $user_name);
   }
   
   $categories = db_fetch_data($DB, $query_template['cathegory']);
   if (gettype($categories) !== 'array') {
-    render_error_db($categories, $is_auth, $title, $user_name);
+    render_error_db($categories, $title, $user_name);
   }
   
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -40,22 +43,21 @@
       $create_lot = db_insert_data($DB, $query_template['sign-up'], $arguments);
 
       if (gettype($create_lot) === 'string') {
-        render_error_db($categories, $is_auth, $title, $user_name);
+        render_error_db($categories, $title, $user_name);
       }
 
-      header('Location: index.php');
+      header('Location: login.php');
     }
   }
   
   $content = include_template(
     'sign-up.php', [
       'cathegory' => $categories ?? [],
-      'path' => $path,
       'post' => $post,
       'error' => $errors,
     ]
   );
   
-  render_page($categories, $content, $is_auth, $title, $user_name);
+  render_page($categories, $content, $title, $user_name);
   
   

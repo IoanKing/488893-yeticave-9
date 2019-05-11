@@ -44,6 +44,6 @@
     <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
     <?php endif; ?>
     <button type="submit" class="button">Зарегистрироваться</button>
-    <a class="text-link" href="#">Уже есть аккаунт</a>
+    <a class="text-link" href="/login.php">Уже есть аккаунт</a>
   </form>
 </main>

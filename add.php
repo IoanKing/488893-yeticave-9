@@ -3,20 +3,35 @@
   require_once(__DIR__.'\inc\function.php');
   require_once(__DIR__.'\inc\db.php');
   
+  session_start();
+  
   $DB = init_connection($DB_config['host'], $DB_config['user'], $DB_config['password'], $DB_config['DB']);
-  $path = __DIR__."\add.php";
   $post = [];
   $files = [];
   $error = [];
+  $title = 'Добавление лота';
+  
+  if (isset($_SESSION['user'])) {
+    $user_name = $_SESSION['user']['name'];
+  }
   
   if (!$DB) {
     $error = mysqli_connect_error();
-    render_error_db($error, $is_auth, $title, $user_name);
+    render_error_db($error, $title, $user_name);
   }
   
   $categories = db_fetch_data($DB, $query_template['cathegory']);
   if (gettype($categories) !== "array") {
-    render_error_db($categories, $is_auth, $title, $user_name);
+    render_error_db($categories, $title, $user_name);
+  }
+  
+  if (empty($user_name)) {
+    $content = include_template(
+      '403.php', [
+        'cathegory' => $categories ?? [],
+      ]
+    );
+    render_page($categories, $content, $title, $user_name);
   }
   
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -45,26 +60,21 @@
       $create_lot = db_insert_data($DB, $query_template['create_lot'], $arguments);
       
       if (gettype($create_lot) === "string") {
-        render_error_db($categories, $is_auth, $title, $user_name);
+        render_error_db($categories, $title, $user_name);
       }
       uploaded_file($files, $filename);
       header("Location: lot.php?id=" . $create_lot);
     }
   }
   
-//  print_r('<pre>');
-//  var_dump($post);
-//  print_r('</pre>');
-  
   $content = include_template(
     'add.php', [
       'cathegory' => $categories ?? [],
-      'path' => $path,
       'post' => $post,
       'error' => $error,
     ]
   );
   
-  render_page($categories, $content, $is_auth, $title, $user_name);
+  render_page($categories, $content, $title, $user_name);
   
   

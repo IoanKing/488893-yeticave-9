@@ -138,7 +138,11 @@
     $res = mysqli_stmt_get_result($stmt);
     
     if ($res) {
-      $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+      if (mysqli_num_rows($res) > 1) {
+        $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+      } else {
+        $result = mysqli_fetch_array($res, MYSQLI_ASSOC);
+      }
     }
     
     return $result;

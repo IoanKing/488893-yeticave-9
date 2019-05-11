@@ -95,15 +95,13 @@
    *
    * @param array $categories   - массив с категориями.
    * @param string $content     - основной контент страницы.
-   * @param bool $is_auth       - признак авторизации пользователя.
    * @param string $title       - название страницы.
    * @param string $user_name   - имя  текущего пользователя.
    */
-  function render_page(array $categories, string $content, bool $is_auth, string $title, string $user_name) {
+  function render_page($categories, $content, $title, $user_name) {
     $layout = include_template('layout.php', [
       'cathegory' => $categories,
       'content' => $content,
-      'is_auth' => $is_auth,
       'title' => $title,
       'user_name' => $user_name,
     ]);
@@ -116,13 +114,12 @@
    * Формирует страницу с ошибкой и прекращает выполнения сценария.
    *
    * @param string $error_text   - ошибка.
-   * @param bool $is_auth        - признак авторизации пользователя.
    * @param string $title        - название страницы.validation_add_lot
    * @param string $user_name    - имя  текущего пользователя.
    */
-  function render_error_db(string $error_text, bool $is_auth, string $title, string $user_name) {
+  function render_error_db($error_text, $title, $user_name) {
     $content = include_template('error.php', ['error' => $error_text]);
-    render_page([], $content, $is_auth, $title, $user_name);
+    render_page([], $content, $title, $user_name);
     exit;
   };
   
@@ -232,7 +229,7 @@
    * Валидация формы регистрации пользователя.
    *
    * @param       $DB   - данные подчклюения к БД.
-   * @param array $post - данные решистрации пользователя.
+   * @param array $post - данные регистрации пользователя.
    *
    * @return array - массив с ошибками. При остусвтии ошибок возвращает пустой массив.
    */
@@ -266,6 +263,46 @@
   
     if (empty($post['message'])) {
       $errors['message'] = 'Введите контактные сведения.';
+    }
+    
+    return $errors;
+  }
+  
+  /**
+   * Проверка авторизации пользователя.
+   * Старт сессии пользователя при осутствии ошибок.
+   *
+   * @param       $DB   - данные подчклюения к БД.
+   * @param array $post - данные авторизации.
+   *
+   * @return array - массив ошибок. При остусвтии ошибок возвращает пустой массив.
+   */
+  function start_session($DB, array $post) : array {
+    $required = ['email', 'password'];
+    $errors = [];
+    foreach ($required as $field) {
+      if (empty($post[$field])) {
+        $errors[$field] = 'Это поле надо заполнить';
+      }
+    }
+  
+    if (empty($errors)) {
+      $email = mysqli_real_escape_string($DB, $post['email']);
+      $sql = 'SELECT * '
+        . 'FROM users '
+        . 'WHERE email = ?';
+  
+      $user = db_fetch_data($DB, $sql, $email);
+  
+      if (!empty($user)) {
+        if (password_verify($post['password'], $user['password'])) {
+          $_SESSION['user'] = $user;
+        } else {
+          $errors['password'] = 'Неверный пароль';
+        }
+      } else {
+        $errors['email'] = 'Пользователь не найден';
+      }
     }
     
     return $errors;
