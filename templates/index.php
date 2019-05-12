@@ -33,7 +33,7 @@
                             <span class="lot__cost"><?=amount_format(floatval($value['start_price'])).' ₽'?></span>
                         </div>
                         <div class="lot__timer timer <?=get_class_finishing($value['end_date']);?>">
-                            <?=get_timer_format($value['end_date'])?>
+                            <?=get_timer_lelt($value['end_date'])?>
                         </div>
                     </div>
                 </div>

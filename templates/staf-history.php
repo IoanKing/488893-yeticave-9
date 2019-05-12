@@ -5,7 +5,7 @@
       <tr class="history__item">
         <td class="history__name"><?=$value['name']?></td>
         <td class="history__price"><?=amount_format(floatval($value['amount'])).' ₽'?></td>
-        <td class="history__time">5 минут назад</td>
+        <td class="history__time"><?=get_timer_past($value['staf_date']);?></td>
       </tr>
     <?php endforeach; ?>
   <?php endif;?>

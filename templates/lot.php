@@ -26,7 +26,7 @@
         <div class="lot-item__right">
           <div class="lot-item__state">
             <div class="lot-item__timer timer <?=get_class_finishing($lot['end_date']);?>">
-              <?=get_timer_format($lot['end_date'])?>
+              <?=get_timer_lelt($lot['end_date'])?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
@@ -37,12 +37,15 @@
     Мин. ставка <span><?=amount_format(floatval($lot['staf_step'])).' ₽'?></span>
               </div>
             </div>
-            <?php if (!empty($user_name)): ?>
-            <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
-              <p class="lot-item__form-item form__item form__item--invalid">
+            <?php if (!empty($user_name) && !$is_user_add_staf): ?>
+            <form class="lot-item__form" action="lot.php" method="post" autocomplete="off">
+              <p class="lot-item__form-item form__item <?=(isset($errors['staf'])) ? 'form__item--invalid' : ''?>">
+                <input id="lot_id" type="hidden" name="lot_id" value="<?=$lot['id']?>"
                 <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="<?=amount_format(floatval($lot['staf_step']))?>">
-                <span class="form__error">Введите ставку лота</span>
+                <input id="cost" type="text" name="cost" placeholder="<?=amount_format($min_rate)?>">
+                <?php if (isset($errors['staf'])) : ?>
+                    <span class="form__error"><?=$errors['staf']?></span>
+                <?php endif; ?>
               </p>
               <button type="submit" class="button">Сделать ставку</button>
             </form>

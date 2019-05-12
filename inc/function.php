@@ -49,16 +49,15 @@
   }
   
   /**
-   * Получить количество секунд до полуночи следующего дня.
+   * Получить количество секунд до/после указанного дня.
    *
-   * @param \DateTime $date   - Дата.
-   * @return \DateInterval - Оставщееся время до полуночи.
+   * @param \DateTime $date - Дата.
+   * @return \DateInterval  - Оставщееся время до полуночи.
    */
-  function get_time_to_tomorow($date) {
-    $curr_date = DateTime::createFromFormat('Y-m-d H:i:s', $date);
+  function get_time_to($date) {
     $nex_day = date_create();
-    $diff = date_diff($nex_day, $curr_date);
-    return $diff;
+    $curr_date = DateTime::createFromFormat('Y-m-d H:i:s', $date);
+    return date_diff($curr_date, $nex_day);
   }
   
   /**
@@ -67,13 +66,165 @@
    * @param \DateTime $date   - Дата.
    * @return string - Строка с оставшимся временем до полуночи.
    */
-  function get_timer_format($date) {
-    $time_count = get_time_to_tomorow($date);
-    $minutes = date_interval_format($time_count, '%I');
-    $hours = date_interval_format($time_count, '%H');
-    $days = date_interval_format($time_count, '%a');
-    return strval($hours + $days*24).":".strval($minutes);
+  function get_timer_lelt($date, $is_full = false) {
+    $main_text = '00:00';
+    $additionl_text = '';
+    
+    $time_count = get_time_to($date);
+    $sign = date_interval_format($time_count, '%r');
+    $minutes = (!empty($sign)) ? date_interval_format($time_count, '%I') : 0;
+    $hours = (!empty($sign)) ? date_interval_format($time_count, '%H') : 0;
+    $days = (!empty($sign)) ? date_interval_format($time_count, '%a') : 0;
+    $seconds = (!empty($sign)) ? date_interval_format($time_count, '%S') : 0;
+    
+    if (!empty($sign)) {
+      $main_text = strval($hours + $days*24) . ":" . strval($minutes);
+      $additionl_text = ($is_full) ? ':' . strval($seconds) : '';
+    }
+    
+    return $main_text . $additionl_text;
   };
+  
+  /**
+   * Формирует статус завершения ставок по лоту.
+   *
+   * @param $end_date   - дата окончания торгов.
+   * @param $winner_id  - идентификатор победителя.
+   * @param $user_id    - идентификатор пользователя.
+   *
+   * @return string     - Статус торгов. Если срок торгов не вышел - возвращает время до окончания торгов.
+   */
+  function get_timer_rate($date, $winner_id, $user_id) {
+    $result = '';
+    $time_left = get_timer_lelt($date, true);
+    if ($time_left !== '00:00') {
+      $result = $time_left;
+    } else {
+      $result = 'Торги окончены';
+    }
+    
+    if ($winner_id === $user_id) {
+      $result = 'Ставка выиграла';
+    }
+    
+    return $result;
+  }
+  
+  /**
+   * Определяет имя класса для записи "Мои ставки".
+   *
+   * @param $end_date   - дата окончания торгов.
+   * @param $winner_id  - идентификатор победителя.
+   * @param $user_id    - идентификатор пользователя.
+   *
+   * @return string     - имя класса.
+   */
+  function get_bets_class($end_date, $winner_id, $user_id) {
+    $time_count = get_time_to($end_date);
+    $sign = date_interval_format($time_count, '%r');
+    $result = '';
+    
+    if (empty($sign)) {
+      $result = 'rates__item--end';
+    }
+    
+    if ($winner_id === $user_id) {
+      $result = 'rates__item--win';
+    }
+    
+    return $result;
+  }
+  
+  /**
+   * Определяет имя класса для таймера нас странице "Мои ставки".
+   *
+   * @param $end_date   - дата окончания торгов.
+   * @param $winner_id  - идентификатор победителя.
+   * @param $user_id    - идентификатор пользователя.
+   *
+   * @return string     - имя класса.
+   */
+  function get_timer_class($end_date, $winner_id, $user_id) {
+    $time_count = get_time_to($end_date);
+    $sign = date_interval_format($time_count, '%r');
+    $result = '';
+    
+    if (!empty($sign)) {
+      $hours = date_interval_format($time_count, '%H');
+      $days = date_interval_format($time_count, '%a');
+      if (($hours + $days*24) < 1) {
+        $result = 'timer--finishing';
+      }
+    } else {
+      $result = 'timer--end';
+    }
+      
+    if ($winner_id === $user_id) {
+      $result = 'timer--win';
+    }
+    
+    return $result;
+  }
+  
+  /**
+   * Получает прошедшее время и приводит его в читабельный формат.
+   *
+   * @param \DateTime $date   - Дата.
+   * @return string - Строка с оставшимся временем до полуночи.
+   */
+  function get_timer_past($date) {
+    $timer = [];
+    $result = '';
+    $time_count = get_time_to($date);
+    $sign = date_interval_format($time_count, '%r');
+    
+    if (empty($sign)) {
+      $timer['years'] = date_interval_format($time_count, '%y');
+      $timer['month'] = date_interval_format($time_count, '%m');
+      $timer['days'] = date_interval_format($time_count, '%d');
+      $timer['hours'] = date_interval_format($time_count, '%h');
+      $timer['minutes'] = date_interval_format($time_count, '%i');
+    
+      if (intval($timer['years']) > 0) {
+        $result = strval($timer['years']) . ' ' . get_noun_plural_form(
+          intval($timer['years']),
+          "год",
+          "года",
+          "лет"
+        );
+      } else if (intval($timer['month']) > 0) {
+        $result = strval($timer['month']) . ' ' . get_noun_plural_form(
+          intval($timer['month']),
+          "месяц",
+          "месяца",
+          "месяцев"
+        );
+      } else if (intval($timer['days']) > 0) {
+        $result = strval($timer['days']) . ' ' . get_noun_plural_form(
+          intval($timer['days']),
+          "день",
+          "дня",
+          "дней"
+        );
+      } else if (intval($timer['hours']) > 0) {
+        $result = strval($timer['hours']) . ' ' . get_noun_plural_form(
+          intval($timer['hours']),
+          "час",
+          "часа",
+          "часов"
+        );
+      } else {
+        $result = strval($timer['minutes']) . ' ' . get_noun_plural_form(
+          intval($timer['minutes']),
+          "минуту",
+          "минуты",
+          "минут"
+        );
+      }
+    }
+    
+    return $result;
+  }
   
   /**
    * Получает оставшиеся время до полуночи и формирует класс finishing если время до полуночи менее часа.
@@ -82,9 +233,10 @@
    * @return string - Наименование класса.
    */
   function get_class_finishing($date) {
-    $time_count = get_time_to_tomorow($date);
+    $time_count = get_time_to($date);
     $hours = date_interval_format($time_count, '%H');
-    if (($hours) < 1) {
+    $days = date_interval_format($time_count, '%a');
+    if (($hours + $days*24) < 1) {
       return 'timer--finishing';
     }
     return '';
@@ -120,7 +272,6 @@
   function render_error_db($error_text, $title, $user_name) {
     $content = include_template('error.php', ['error' => $error_text]);
     render_page([], $content, $title, $user_name);
-    exit;
   };
   
   /**
@@ -306,4 +457,74 @@
     }
     
     return $errors;
+  }
+  
+  /**
+   * Проверяет форму добавления ставки.
+   *
+   * @param array $post     - Новая ставка.
+   * @param array $lot      - данные лота.
+   *
+   * @return array - массив ошибок. При остусвтии ошибок возвращает пустой массив.
+   */
+  function validation_add_staf($post, array $lot) {
+    $errors = [];
+    $new_staf = $post['cost'];
+    $current_rate = $lot['price'] + $lot['staf_step'];
+    
+    if (empty($new_staf)) {
+      $errors['staf'] = '1';
+    } else if (!is_numeric($new_staf)) {
+      $errors['staf'] = '2';
+    } else if ($new_staf < $current_rate) {
+      $errors['staf'] = '3';
+    }
+
+    return $errors;
+  }
+  
+  /**
+   * Возвращает корректную форму множественного числа
+   * Ограничения: только для целых чисел
+   *
+   * Пример использования:
+   * $remaining_minutes = 5;
+   * echo "Я поставил таймер на {$remaining_minutes} " .
+   *     get_noun_plural_form(
+   *         $remaining_minutes,
+   *         "минута",
+   *         "минуты",
+   *         "минут"
+   *     );
+   * Результат: "Я поставил таймер на 5 минут"
+   *
+   * @param int $number Число, по которому вычисляем форму множественного числа
+   * @param string $one Форма единственного числа: яблоко, час, минута
+   * @param string $two Форма множественного числа для 2, 3, 4: яблока, часа, минуты
+   * @param string $many Форма множественного числа для остальных чисел
+   *
+   * @return string Рассчитанная форма множественнго числа
+   */
+  function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+  {
+    $number = (int) $number;
+    $mod10 = $number % 10;
+    $mod100 = $number % 100;
+    
+    switch (true) {
+    case ($mod100 >= 11 && $mod100 <= 20):
+      return $many;
+    
+    case ($mod10 > 5):
+      return $many;
+    
+    case ($mod10 === 1):
+      return $one;
+    
+    case ($mod10 >= 2 && $mod10 <= 4):
+      return $two;
+    
+    default:
+      return $many;
+    }
   }
