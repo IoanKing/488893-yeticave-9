@@ -64,7 +64,7 @@
   $content = include_template(
     'lot.php', [
       'cathegory' => $categories ?? [],
-      'lot' => $lot ?? [],
+      'lot' => $lot[0] ?? [],
       'staf_history' => $staf_history,
       'user_name' => $user_name,
     ]

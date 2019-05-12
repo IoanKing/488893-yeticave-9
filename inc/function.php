@@ -294,9 +294,9 @@
   
       $user = db_fetch_data($DB, $sql, $email);
   
-      if (!empty($user)) {
-        if (password_verify($post['password'], $user['password'])) {
-          $_SESSION['user'] = $user;
+      if (!empty($user[0])) {
+        if (password_verify($post['password'], $user[0]['password'])) {
+          $_SESSION['user'] = $user[0];
         } else {
           $errors['password'] = 'Неверный пароль';
         }
