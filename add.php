@@ -1,23 +1,11 @@
 <?php
-  require_once(__DIR__.'\inc\config.php');
-  require_once(__DIR__.'\inc\function.php');
-  require_once(__DIR__.'\inc\db.php');
+  require_once(__DIR__.'\init.php');
   
-  session_start();
-  
-  $DB = init_connection($DB_config['host'], $DB_config['user'], $DB_config['password'], $DB_config['DB']);
-  $post = [];
-  $files = [];
-  $error = [];
   $title = 'Добавление лота';
   
-  if (isset($_SESSION['user'])) {
-    $user_name = $_SESSION['user']['name'];
-  }
-  
   if (!$DB) {
-    $error = mysqli_connect_error();
-    render_error_db($error, $title, $user_name);
+    $errors = mysqli_connect_error();
+    render_error_db($errors, $title, $user_name);
   }
   
   $categories = db_fetch_data($DB, $query_template['cathegory']);
@@ -34,14 +22,14 @@
     render_page($categories, $content, $title, $user_name);
   }
   
-  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $post = $_POST;
     $files = $_FILES['file'];
-    $error = validation_add_lot($post, $files);
+    $errors = validation_add_lot($post, $files);
   
     $createdate = date_create('now')->format('Y-m-d');
   
-    if (!in_array(true, $error)) {
+    if (!in_array(true, $errors)) {
       $mimetype = mime_content_type($files['tmp_name']);
       $filename = uniqid() . get_file_type($mimetype);
       $createdate = date_create('now')->format('Y-m-d');
@@ -71,7 +59,7 @@
     'add.php', [
       'cathegory' => $categories ?? [],
       'post' => $post,
-      'error' => $error,
+      'errors' => $errors,
     ]
   );
   

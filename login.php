@@ -1,14 +1,6 @@
 <?php
-  require_once(__DIR__.'\inc\config.php');
-  require_once(__DIR__.'\inc\function.php');
-  require_once(__DIR__.'\inc\db.php');
+  require_once(__DIR__.'\init.php');
   
-  session_start();
-  
-  $DB = init_connection($DB_config['host'], $DB_config['user'], $DB_config['password'], $DB_config['DB']);
-  $post = [];
-  $errors = [];
-  $user_name = '';
   $title = 'Авторизация';
   
   if (!$DB) {
@@ -21,7 +13,7 @@
     render_error_db($categories, $title, $user_name);
   }
   
-  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $post = $_POST;
     $errors = start_session($DB, $post);
     

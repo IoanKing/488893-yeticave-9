@@ -26,6 +26,14 @@
       .'WHERE l.id = ? '
       .'ORDER BY staf_date DESC '
       .'LIMIT 10 ',
+    'my_bets' => 'SELECT l.id as lot_id, picture, title, u.contact as contact, c.name AS cathegory, end_date, winner_id, s1.amount AS rate, MAX(s1.staf_date) AS staf_date '
+      .'FROM lots AS l '
+      .'JOIN cathegory AS c ON l.category_id = c.id '
+      .'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
+      .'LEFT JOIN users u ON l.user_id = u.id '
+      .'WHERE s1.user_id = ? '
+      .'GROUP BY lot_id, title, contact, staf_date, picture, cathegory, end_date, description, rate, winner_id '
+      .'ORDER BY end_date DESC ',
     'create_lot' => 'INSERT '
       .'INTO lots '
       .'(title, description, picture, start_price, staf_step, user_id, category_id, create_date, end_date) VALUES '
@@ -37,6 +45,15 @@
     'check_email' => 'SELECT id '
       .'FROM users '
       .'WHERE email = "?" ',
+    'add_rate' => 'INSERT '
+      .'INTO user_staf '
+      .'(lot_id, user_id, amount, staf_date) VALUES '
+      .'(?, ?, ?, ?)',
+    'get_last_user_rate' => 'SELECT user_id AS id '
+      .'FROM user_staf '
+      .'WHERE lot_id = ? '
+      .'ORDER BY staf_date DESC '
+      .'LIMIT 1 '
   ];
   
   /**
@@ -138,11 +155,7 @@
     $res = mysqli_stmt_get_result($stmt);
     
     if ($res) {
-      if (mysqli_num_rows($res) > 1) {
-        $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
-      } else {
-        $result = mysqli_fetch_array($res, MYSQLI_ASSOC);
-      }
+      $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
     }
     
     return $result;
