@@ -2,6 +2,7 @@
   require_once(__DIR__.'\init.php');
   
   $title = 'Поиск';
+  $adverts = [];
   $pagination = [];
   
   $get = $_GET;
@@ -24,12 +25,17 @@
   }
   
   $pages_count = intval(ceil($count_adverts[0]['count'] / $limit_per_page));
-  $offset = ($page - 1) * $limit_per_page;
-  $pagination = range(1, $pages_count);
   
-  $adverts = db_fetch_data($DB, $query_template['search'], [$search_phrase, $limit_per_page, $offset]);
-  if (gettype($adverts) !== "array") {
-    render_error_db($adverts, $title, $user_name);
+  if ($pages_count > 0) {
+    $offset = ($page - 1) * $limit_per_page;
+    $pagination = range(1, $pages_count);
+  
+    $adverts = db_fetch_data(
+      $DB, $query_template['search'], [$search_phrase, $limit_per_page, $offset]
+    );
+    if (gettype($adverts) !== "array") {
+      render_error_db($adverts, $title, $user_name);
+    }
   }
   
   $content = include_template(

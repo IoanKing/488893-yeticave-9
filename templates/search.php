@@ -12,7 +12,7 @@
 </nav>
 <div class="container">
   <section class="lots">
-    <h2>Результаты поиска по запросу «<span><?=$search_phrase?></span>»</h2>
+    <h2><?=(count($pagination) !== 0 ) ? 'Результаты поиска по запросу «<span>' . $search_phrase . '</span>»' : 'Ничего не найдено по вашему запросу'?></h2>
     <ul class="lots__list">
   <?php if ($adverts && !empty($adverts)): ?>
     <?php foreach ($adverts as $value): ?>
