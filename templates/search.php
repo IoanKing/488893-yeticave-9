@@ -1,0 +1,53 @@
+<main>
+<nav class="nav">
+  <ul class="nav__list container">
+    <?php if ($cathegory && !empty($cathegory)): ?>
+      <?php foreach ($cathegory as $value): ?>
+            <li class="nav__item">
+                <a href="pages/all-lots.html"><?=esc($value['name'])?></a>
+            </li>
+      <?php endforeach; ?>
+    <?php endif;?>
+  </ul>
+</nav>
+<div class="container">
+  <section class="lots">
+    <h2>Результаты поиска по запросу «<span><?=$search_phrase?></span>»</h2>
+    <ul class="lots__list">
+  <?php if ($adverts && !empty($adverts)): ?>
+    <?php foreach ($adverts as $value): ?>
+      <li class="lots__item lot">
+          <div class="lot__image">
+              <img src="/uploads/<?=esc($value['picture'])?>" width="350" height="260" alt="">
+          </div>
+          <div class="lot__info">
+              <span class="lot__category"><?=esc($value['cathegory'])?></span>
+              <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?=esc($value['id'])?>"><?=esc($value['title'])?></a></h3>
+              <div class="lot__state">
+                  <div class="lot__rate">
+                      <span class="lot__amount">Стартовая цена</span>
+                      <span class="lot__cost"><?=amount_format(floatval($value['start_price'])).' ₽'?></span>
+                  </div>
+                  <div class="lot__timer timer <?=get_class_finishing($value['end_date']);?>">
+                    <?=get_timer_lelt($value['end_date'])?>
+                  </div>
+              </div>
+          </div>
+      </li>
+    <?php endforeach; ?>
+  <?php endif;?>
+    </ul>
+  </section>
+  <?php if (count($pagination) > 1) : ?>
+      <ul class="pagination-list">
+        <li class="pagination-item pagination-item-prev"><a href="<?=($page > 1) ? '/search.php?search=' . $search_phrase . '&page=' . ($page - 1) : ''?>">Назад</a></li>
+        <?php if ($pagination && !empty($pagination)): ?>
+          <?php foreach ($pagination as $value): ?>
+        <li class="pagination-item <?=($page === $value) ? 'pagination-item-active' : ''?>"><a href="<?=($page !== $value) ? '/search.php?search=' . $search_phrase . '&page=' . $value : ''?>"><?=$value?></a></li>
+          <?php endforeach; ?>
+        <?php endif;?>
+        <li class="pagination-item pagination-item-next"><a href="<?=(($page) < count($pagination)) ? '/search.php?search=' . $search_phrase . '&page=' . ($page + 1) : ''?>">Вперед</a></li>
+      </ul>
+  <?php endif; ?>
+</div>
+</main>

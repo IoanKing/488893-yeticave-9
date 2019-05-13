@@ -8,3 +8,5 @@ $DB_config = [
   "password" => "",
   "DB" => "yaticave_488893",
 ];
+
+$limit_per_page = 9;
