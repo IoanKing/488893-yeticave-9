@@ -53,7 +53,16 @@
       .'FROM user_staf '
       .'WHERE lot_id = ? '
       .'ORDER BY staf_date DESC '
-      .'LIMIT 1 '
+      .'LIMIT 1 ',
+    'search_count' => 'SELECT COUNT(*) AS count '
+      .'FROM lots '
+      .'WHERE MATCH(title, description) AGAINST(?)',
+    'search' => 'SELECT l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date '
+      .'FROM lots AS l '
+      .'JOIN cathegory AS c ON l.category_id = c.id '
+      .'WHERE MATCH(title, description) AGAINST(?) '
+      .'LIMIT ? OFFSET ?',
+
   ];
   
   /**

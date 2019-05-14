@@ -31,6 +31,7 @@ CREATE TABLE lots (
 );
 
 CREATE INDEX l_title ON lots(title);
+CREATE FULLTEXT INDEX lot_search ON lots(title, description);
 
 CREATE TABLE cathegory (
     id INT AUTO_INCREMENT PRIMARY KEY,

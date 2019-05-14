@@ -39,3 +39,15 @@ SELECT l.id as lot_id, picture, title, u.contact as contact, c.name AS cathegory
     WHERE s1.user_id = 7
     GROUP BY lot_id, title, contact, staf_date, picture, cathegory, end_date, description, rate, winner_id
     ORDER BY end_date DESC;
+
+/* Количество возможных результатов поиска */
+SELECT COUNT(*)
+    FROM lots
+    WHERE MATCH(title, description) AGAINST('Lorem');
+
+/* Результаты поиска */
+SELECT l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date
+    FROM lots AS l
+    JOIN cathegory AS c ON l.category_id = c.id
+    WHERE MATCH(title, description) AGAINST('Lorem')
+    LIMIT 3 OFFSET 1;
