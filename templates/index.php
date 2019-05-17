@@ -3,11 +3,10 @@
         <h2 class="promo__title">Нужен стафф для катки?</h2>
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
-            <!--заполните этот список из массива категорий-->
           <?php if ($cathegory && !empty($cathegory)): ?>
             <?php foreach ($cathegory as $value): ?>
             <li class="promo__item promo__item--<?=esc($value['code'])?>">
-                <a class="promo__link" href="pages/all-lots.html"><?=esc($value['name'])?></a>
+                <a class="promo__link" href="/cathegory.php?id=<?=$value['id']?>"><?=esc($value['name'])?></a>
             </li>
             <?php endforeach; ?>
           <?php endif;?>

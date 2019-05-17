@@ -27,7 +27,6 @@
     render_error_db($user_rates, $title, $user_name);
   }
   
-  
   $content = include_template(
     'my-bets.php', [
       'cathegory' => $categories ?? [],

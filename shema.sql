@@ -128,7 +128,7 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     4,
     DATE_SUB(CURDATE(), INTERVAL 4 DAY),
     DATE_SUB(CURDATE(), INTERVAL 1 DAY),
-    2
+    NULL
 ),
 (
     'Маска Oakley Canopy',
@@ -140,7 +140,67 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     6,
     DATE_SUB(CURDATE(), INTERVAL 5 DAY),
     DATE_SUB(CURDATE(), INTERVAL 3 DAY),
-    1
+    NULL
+),
+(
+    '2019 Rossignol District Snowboard',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius accumsan ante sodales vulputate. Donec ornare orci eu aliquet molestie. Vivamus vestibulum porttitor rhoncus. Integer ultricies pharetra pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis in quam eget elementum. Integer quis nibh vel metus fermentum finibus. Nulla facilisi. Etiam nulla velit, maximus id facilisis nec, ornare sit amet turpis. Phasellus placerat condimentum sapien vitae semper. Pellentesque a diam cursus, luctus nunc eget, consequat odio. Ut consectetur risus sit amet commodo interdum. Nullam scelerisque volutpat nunc ut ultrices.',
+    'lot-1.jpg',
+    10999,
+    12000,
+    2,
+    1,
+    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    NULL
+),
+(
+    'DC Ply Mens 2018/2019 Snowboard',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius accumsan ante sodales vulputate. Donec ornare orci eu aliquet molestie. Vivamus vestibulum porttitor rhoncus. Integer ultricies pharetra pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis in quam eget elementum. Integer quis nibh vel metus fermentum finibus. Nulla facilisi. Etiam nulla velit, maximus id facilisis nec, ornare sit amet turpis. Phasellus placerat condimentum sapien vitae semper. Pellentesque a diam cursus, luctus nunc eget, consequat odio. Ut consectetur risus sit amet commodo interdum. Nullam scelerisque volutpat nunc ut ultrices.',
+    'lot-2.jpg',
+    159999,
+    50000,
+    1,
+    1,
+    DATE_SUB(CURDATE(), INTERVAL 2 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    NULL
+),
+(
+    'Крепления Union Contact Pro 2019 года размер S/M',
+    'Donec ornare orci eu aliquet molestie. Vivamus vestibulum porttitor rhoncus. Integer ultricies pharetra pulvinar.',
+    'lot-3.jpg',
+    8000,
+    1000,
+    1,
+    2,
+    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    NULL
+),
+(
+    'Ботинки для сноуборда DC Mutiny Charocal 2019',
+    'Mauris sed egestas quam. Phasellus sed purus condimentum, pretium justo sed, fermentum est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec feugiat orci sit amet facilisis cursus.',
+    'lot-4.jpg',
+    10999,
+    2000,
+    3,
+    3,
+    DATE_SUB(CURDATE(), INTERVAL 4 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 2 DAY),
+    NULL
+),
+(
+    'Куртка для сноуборда DC Mutiny Charocal 2019',
+    'Praesent ac ultricies nulla, non tristique sapien. Donec imperdiet nisl blandit magna bibendum, eget ornare neque pellentesque. Nulla sagittis tristique ultri',
+    'lot-5.jpg',
+    7500,
+    2500,
+    2,
+    4,
+    DATE_SUB(CURDATE(), INTERVAL 4 DAY),
+    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    NULL
 );
 
 /* Добавление ставок для лотов */
