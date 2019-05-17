@@ -1,0 +1,15 @@
+{
+    "name": "suslov_ia/yeticave",
+    "description": "HTMLacademy",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ivan Suslov",
+            "email": "ioankingisepp@mail.ru"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}

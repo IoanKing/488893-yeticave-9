@@ -10,3 +10,4 @@ $DB_config = [
 ];
 
 $limit_per_page = 9;
+$site_adress = 'http://488893-yeticave-9/';

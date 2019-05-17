@@ -3,6 +3,8 @@
   require_once(__DIR__.'\inc\function.php');
   require_once(__DIR__.'\inc\db.php');
   
+  require_once(__DIR__.'\vendor\autoload.php');
+  
   session_start();
   
   $post = [];

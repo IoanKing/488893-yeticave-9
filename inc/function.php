@@ -528,3 +528,25 @@
       return $many;
     }
   }
+  
+  /**
+   * Отправка сообщения на email.
+   *
+   * @param $email - адрес получателя.
+   * @param $body  - тело письма.
+   */
+  function send_mail($email, $body) {
+    $transport = new Swift_SmtpTransport('phpdemo.ru', 25);
+    $transport->setUserName('keks@phpdemo.ru');
+    $transport->setPassword('htmlacademy');
+  
+    $message = new Swift_Message("Ваша ставка победила");
+    $message->setTo($email);
+    $message->setBody($body, 'text/html');
+    $message->setFrom('keks@phpdemo.ru', 'phpdemo');
+  
+    $mailer = new Swift_Mailer($transport);
+    $logger = new Swift_Plugins_Loggers_ArrayLogger();
+    $mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
+    $mailer->send($message);
+  };
