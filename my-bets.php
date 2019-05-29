@@ -8,7 +8,7 @@
     render_error_db($errors, $title, $user_name);
   }
   
-  $categories = db_fetch_data($DB, $query_template['cathegory']);
+  $categories = db_fetch_data($DB, isset($query_template['cathegory']) ? $query_template['cathegory'] : '');
   if (gettype($categories) !== "array") {
     render_error_db($categories, $title, $user_name);
   }
@@ -22,7 +22,7 @@
     render_page($categories, $content, $title, $user_name);
   }
   
-  $user_rates = db_fetch_data($DB, $query_template['my_bets'], $user_id);
+  $user_rates = db_fetch_data($DB, isset($query_template['my_bets']) ? $query_template['my_bets'] : '', $user_id);
   if (gettype($categories) !== 'array') {
     render_error_db($user_rates, $title, $user_name);
   }

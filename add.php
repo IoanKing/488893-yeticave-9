@@ -35,21 +35,22 @@
       $createdate = date_create('now')->format('Y-m-d');
       
       $arguments = [
-        $post['lot-name'],
-        $post['message'],
+        isset($post['lot-name']) ? esc($post['lot-name']) : '',
+        isset($post['message']) ? esc($post['message']) : '',
         $filename,
-        $post['lot-rate'],
-        $post['lot-step'],
+        isset($post['lot-rate']) ? esc($post['lot-rate']) : '',
+        isset($post['lot-step']) ? esc($post['lot-step']) : '',
         1,
-        $post['category'],
+        isset($post['category']) ? esc($post['category']) : '',
         $createdate,
-        $post["lot-date"]
+        isset($post['lot-date']) ? esc($post['lot-date']) : ''
       ];
-      $create_lot = db_insert_data($DB, $query_template['create_lot'], $arguments);
+      $create_lot = db_insert_data($DB, isset($query_template['create_lot']) ? $query_template['create_lot'] : '', $arguments);
       
       if (gettype($create_lot) === "string") {
-        render_error_db($categories, $title, $user_name);
+        render_error_db($create_lot, $title, $user_name);
       }
+      
       uploaded_file($files, $filename);
       header("Location: lot.php?id=" . $create_lot);
     }
@@ -58,8 +59,8 @@
   $content = include_template(
     'add.php', [
       'cathegory' => $categories ?? [],
-      'post' => $post,
-      'errors' => $errors,
+      'post' => $post ?? [],
+      'errors' => $errors ?? [],
     ]
   );
   

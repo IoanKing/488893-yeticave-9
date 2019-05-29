@@ -10,12 +10,12 @@
   
   require_once(__DIR__.'\get_winner.php');
   
-  $categories = db_fetch_data($DB, $query_template['cathegory']);
+  $categories = db_fetch_data($DB, isset($query_template['cathegory']) ? $query_template['cathegory'] : '');
   if (gettype($categories) !== "array") {
     render_error_db($categories, $title, $user_name);
   }
   
-  $adverts = db_fetch_data($DB, $query_template['lot']);
+  $adverts = db_fetch_data($DB, isset($query_template['lot']) ? $query_template['lot'] : '');
   if (gettype($adverts) !== "array") {
     render_error_db($adverts, $title, $user_name);
   }

@@ -5,6 +5,7 @@
   $lot_id = '';
   $min_rate = 0;
   $is_user_add_staf = false;
+  $is_date_end = false;
   
   $error_template = [
     '1' => 'Введите ставку лота!',
@@ -27,7 +28,7 @@
     $lot_id = $post['lot_id'];
     $new_rate = $post['cost'];
   
-    $lot = db_fetch_data($DB, $query_template['lot_full'], $lot_id);
+    $lot = db_fetch_data($DB, isset($query_template['lot_full']) ? $query_template['lot_full'] : '', $lot_id);
     if (gettype($lot) !== "array" && !empty($lot)) {
       render_error_db($lot, $title, $user_name);
     }
@@ -43,7 +44,7 @@
         $createdate,
       ];
       
-      $create_lot = db_insert_data($DB, $query_template['add_rate'], $arguments);
+      $create_lot = db_insert_data($DB, isset($query_template['add_rate']) ? $query_template['add_rate'] : '', $arguments);
       if (gettype($create_lot) === "string") {
         render_error_db($categories, $title, $user_name);
       }
@@ -71,7 +72,7 @@
     render_page($categories, $content, $title, $user_name);
   }
 
-  $lot = db_fetch_data($DB, $query_template['lot_full'], $lot_id);
+  $lot = db_fetch_data($DB, isset($query_template['lot_full']) ? $query_template['lot_full'] : '', $lot_id);
   if (gettype($lot) !== "array" && !empty($lot)) {
     render_error_db($lot, $title, $user_name);
   }
@@ -85,19 +86,28 @@
     render_page($categories, $content, $title, $user_name);
   }
   
-  $min_rate = $lot[0]['price'] + $lot[0]['staf_step'];
-  $rates = db_fetch_data($DB, $query_template['staf_history'], $lot_id);
+  if (isset($lot[0]['price']) && isset($lot[0]['staf_step'])) {
+    $min_rate = $lot[0]['price'] + $lot[0]['staf_step'];
+  }
+  
+  $rates = db_fetch_data($DB, isset($query_template['staf_history']) ? $query_template['staf_history'] : '', $lot_id);
 
   if (gettype($rates) !== "array" && !empty($rates)) {
     render_error_db($rates, $title, $user_name);
   }
   
-  $last_user_staf = db_fetch_data($DB, $query_template['get_last_user_rate'], $lot_id);
+  $last_user_staf = db_fetch_data($DB, isset($query_template['get_last_user_rate']) ? $query_template['get_last_user_rate'] : '', $lot_id);
   if (gettype($rates) !== "array" && !empty($rates)) {
     render_error_db($last_user_staf, $title, $user_name);
   }
   
-  $is_user_add_staf = ($last_user_staf[0]['id'] == $user_id);
+  if (isset($lot[0]['id'])) {
+    $is_user_add_staf = ($last_user_staf[0]['id'] === $user_id);
+  }
+
+  if (isset($lot[0]['end_date'])) {
+    $is_date_end = (get_timer_lelt($lot[0]['end_date']) === '00:00') ? true : false;
+  }
 
   $staf_history = include_template(
     'staf-history.php', [
@@ -114,6 +124,7 @@
       'errors' => $errors,
       'min_rate' => $min_rate,
       'is_user_add_staf' => $is_user_add_staf,
+      'is_date_end' => $is_date_end
     ]
   );
 

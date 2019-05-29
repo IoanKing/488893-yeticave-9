@@ -71,11 +71,11 @@
       .'LIMIT 1 ',
     'search_count' => 'SELECT COUNT(*) AS count '
       .'FROM lots '
-      .'WHERE MATCH(title, description) AGAINST(?)',
+      .'WHERE MATCH(title, description) AGAINST(? IN BOOLEAN MODE) ',
     'search' => 'SELECT l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date '
       .'FROM lots AS l '
       .'JOIN cathegory AS c ON l.category_id = c.id '
-      .'WHERE MATCH(title, description) AGAINST(?) '
+      .'WHERE MATCH(title, description) AGAINST(? IN BOOLEAN MODE) '
       .'LIMIT ? OFFSET ? ',
     'get_winner' => 'SELECT l.id AS id, s1.user_id AS user, l.title  '
       .'FROM lots AS l '

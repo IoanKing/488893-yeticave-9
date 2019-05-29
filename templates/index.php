@@ -5,8 +5,8 @@
         <ul class="promo__list">
           <?php if ($cathegory && !empty($cathegory)): ?>
             <?php foreach ($cathegory as $value): ?>
-            <li class="promo__item promo__item--<?=esc($value['code'])?>">
-                <a class="promo__link" href="/cathegory.php?id=<?=$value['id']?>"><?=esc($value['name'])?></a>
+            <li class="promo__item promo__item--<?=isset($value['code']) ? esc($value['code']) : ''?>">
+                <a class="promo__link" href="/cathegory.php?id=<?=isset($value['id']) ? $value['id'] : ''?>"><?=isset($value['name']) ? esc($value['name']) : ''?></a>
             </li>
             <?php endforeach; ?>
           <?php endif;?>
@@ -21,18 +21,22 @@
         <?php foreach ($adverts as $value): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
-                    <img src="/uploads/<?=esc($value['picture'])?>" width="350" height="260" alt="">
+                    <img src="/uploads/<?=isset($value['picture']) ? esc($value['picture']) : ''?>" width="350" height="260" alt="">
                 </div>
                 <div class="lot__info">
-                    <span class="lot__category"><?=esc($value['cathegory'])?></span>
-                    <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?=esc($value['id'])?>"><?=esc($value['title'])?></a></h3>
+                    <span class="lot__category"><?=isset($value['cathegory']) ? esc($value['cathegory']) : ''?></span>
+                    <h3 class="lot__title">
+                        <a class="text-link" href="lot.php?id=<?=isset($value['id']) ? esc($value['id']) : ''?>">
+                          <?=isset($value['title']) ? esc($value['title']) : ''?>
+                        </a>
+                    </h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=amount_format(floatval($value['start_price'])).' ₽'?></span>
+                            <span class="lot__cost"><?=isset($value['start_price']) ? amount_format(floatval($value['start_price'])).' ₽' : ''?></span>
                         </div>
-                        <div class="lot__timer timer <?=get_class_finishing($value['end_date']);?>">
-                            <?=get_timer_lelt($value['end_date'])?>
+                        <div class="lot__timer timer <?=isset($value['end_date']) ? get_class_finishing($value['end_date']) : ''?>">
+                            <?=isset($value['end_date']) ? get_timer_lelt($value['end_date']) : ''?>
                         </div>
                     </div>
                 </div>

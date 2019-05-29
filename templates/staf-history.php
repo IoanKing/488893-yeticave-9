@@ -3,9 +3,9 @@
   <?php if ($rates && !empty($rates)): ?>
     <?php foreach ($rates as $value): ?>
       <tr class="history__item">
-        <td class="history__name"><?=$value['name']?></td>
-        <td class="history__price"><?=amount_format(floatval($value['amount'])).' ₽'?></td>
-        <td class="history__time"><?=get_timer_past($value['staf_date']);?></td>
+        <td class="history__name"><?=isset($value['name']) ? esc($value['name']) : ''?></td>
+        <td class="history__price"><?=isset($value['amount']) ? amount_format(floatval($value['amount'])).' ₽' : ''?></td>
+        <td class="history__time"><?=isset($value['staf_date']) ? get_timer_past($value['staf_date']) : ''?></td>
       </tr>
     <?php endforeach; ?>
   <?php endif;?>

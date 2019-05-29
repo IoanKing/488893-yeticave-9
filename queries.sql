@@ -1,3 +1,167 @@
+/* Добавление новых пользователей */
+/* логин: ivan.ivanov@mail.ru, пароль: 12345*/
+INSERT INTO users (name, email, password, avatar, contact, date_registration) VALUES
+('Иван', 'ioankingisepp@yandex.ru', '$2y$10$/xb2OUrB4T9aMjspKvHj1./v..T1E8hUfq5tRnPF2pDxzdgX7Y5Xq', 'avatar.jpg', '8(999) 876-54-32', '2018-06-12 05:30'),
+('Константин', 'ioankingisepp@mail.ru', '$2y$10$/xb2OUrB4T9aMjspKvHj1./v..T1E8hUfq5tRnPF2pDxzdgX7Y5Xq', 'avatar.jpg', '8(654)123-55-33', '2019-04-03 11:24');
+
+/* Добавление лотов */
+INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, category_id, create_date, end_date, winner_id) VALUES
+(
+    '2014 Rossignol District Snowboard',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius accumsan ante sodales vulputate. Donec ornare orci eu aliquet molestie. Vivamus vestibulum porttitor rhoncus. Integer ultricies pharetra pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis in quam eget elementum. Integer quis nibh vel metus fermentum finibus. Nulla facilisi. Etiam nulla velit, maximus id facilisis nec, ornare sit amet turpis. Phasellus placerat condimentum sapien vitae semper. Pellentesque a diam cursus, luctus nunc eget, consequat odio. Ut consectetur risus sit amet commodo interdum. Nullam scelerisque volutpat nunc ut ultrices.',
+    'lot-1.jpg',
+    10999,
+    12000,
+    2,
+    1,
+    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    NULL
+),
+(
+    'DC Ply Mens 2016/2017 Snowboard',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius accumsan ante sodales vulputate. Donec ornare orci eu aliquet molestie. Vivamus vestibulum porttitor rhoncus. Integer ultricies pharetra pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis in quam eget elementum. Integer quis nibh vel metus fermentum finibus. Nulla facilisi. Etiam nulla velit, maximus id facilisis nec, ornare sit amet turpis. Phasellus placerat condimentum sapien vitae semper. Pellentesque a diam cursus, luctus nunc eget, consequat odio. Ut consectetur risus sit amet commodo interdum. Nullam scelerisque volutpat nunc ut ultrices.',
+    'lot-2.jpg',
+    159999,
+    50000,
+    1,
+    1,
+    DATE_SUB(CURDATE(), INTERVAL 2 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    NULL
+),
+(
+    'Крепления Union Contact Pro 2015 года размер L/XL',
+    'Donec ornare orci eu aliquet molestie. Vivamus vestibulum porttitor rhoncus. Integer ultricies pharetra pulvinar.',
+    'lot-3.jpg',
+    8000,
+    1000,
+    1,
+    2,
+    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    NULL
+),
+(
+    'Ботинки для сноуборда DC Mutiny Charocal',
+    'Mauris sed egestas quam. Phasellus sed purus condimentum, pretium justo sed, fermentum est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec feugiat orci sit amet facilisis cursus.',
+    'lot-4.jpg',
+    10999,
+    2000,
+    2,
+    3,
+    DATE_SUB(CURDATE(), INTERVAL 4 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 2 DAY),
+    NULL
+),
+(
+    'Куртка для сноуборда DC Mutiny Charocal',
+    'Praesent ac ultricies nulla, non tristique sapien. Donec imperdiet nisl blandit magna bibendum, eget ornare neque pellentesque. Nulla sagittis tristique ultri',
+    'lot-5.jpg',
+    7500,
+    2500,
+    2,
+    4,
+    DATE_SUB(CURDATE(), INTERVAL 4 DAY),
+    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    NULL
+),
+(
+    'Маска Oakley Canopy',
+    'Donec vel laoreet nibh, quis viverra sem. In hac habitasse platea dictumst. Maecenas ac urna tellus. Aenean diam metus, rutrum et dignissim quis, pharetra non lacus. Aenean a leo neque. Pellentesque eros metus, cursus id placerat vel, interdum sed libero. Nunc tincidunt porta metus, quis tristique ex. Nulla feugiat et lectus vel dignissim. Vestibulum rutrum nulla laoreet urna pulvinar, nec hendrerit eros iaculis.',
+    'lot-6.jpg',
+    5400,
+    1500,
+    2,
+    6,
+    DATE_SUB(CURDATE(), INTERVAL 5 DAY),
+    DATE_SUB(CURDATE(), INTERVAL 3 DAY),
+    NULL
+),
+(
+    '2019 Rossignol District Snowboard',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius accumsan ante sodales vulputate. Donec ornare orci eu aliquet molestie. Vivamus vestibulum porttitor rhoncus. Integer ultricies pharetra pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis in quam eget elementum. Integer quis nibh vel metus fermentum finibus. Nulla facilisi. Etiam nulla velit, maximus id facilisis nec, ornare sit amet turpis. Phasellus placerat condimentum sapien vitae semper. Pellentesque a diam cursus, luctus nunc eget, consequat odio. Ut consectetur risus sit amet commodo interdum. Nullam scelerisque volutpat nunc ut ultrices.',
+    'lot-1.jpg',
+    10999,
+    12000,
+    2,
+    1,
+    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    NULL
+),
+(
+    'DC Ply Mens 2018/2019 Snowboard',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius accumsan ante sodales vulputate. Donec ornare orci eu aliquet molestie. Vivamus vestibulum porttitor rhoncus. Integer ultricies pharetra pulvinar. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis in quam eget elementum. Integer quis nibh vel metus fermentum finibus. Nulla facilisi. Etiam nulla velit, maximus id facilisis nec, ornare sit amet turpis. Phasellus placerat condimentum sapien vitae semper. Pellentesque a diam cursus, luctus nunc eget, consequat odio. Ut consectetur risus sit amet commodo interdum. Nullam scelerisque volutpat nunc ut ultrices.',
+    'lot-2.jpg',
+    159999,
+    50000,
+    1,
+    1,
+    DATE_SUB(CURDATE(), INTERVAL 2 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    NULL
+),
+(
+    'Крепления Union Contact Pro 2019 года размер S/M',
+    'Donec ornare orci eu aliquet molestie. Vivamus vestibulum porttitor rhoncus. Integer ultricies pharetra pulvinar.',
+    'lot-3.jpg',
+    8000,
+    1000,
+    1,
+    2,
+    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    NULL
+),
+(
+    'Ботинки для сноуборда DC Mutiny Charocal 2019',
+    'Mauris sed egestas quam. Phasellus sed purus condimentum, pretium justo sed, fermentum est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec feugiat orci sit amet facilisis cursus.',
+    'lot-4.jpg',
+    10999,
+    2000,
+    1,
+    3,
+    DATE_SUB(CURDATE(), INTERVAL 4 DAY),
+    DATE_ADD(CURDATE(), INTERVAL 2 DAY),
+    NULL
+),
+(
+    'Куртка для сноуборда DC Mutiny Charocal 2019',
+    'Praesent ac ultricies nulla, non tristique sapien. Donec imperdiet nisl blandit magna bibendum, eget ornare neque pellentesque. Nulla sagittis tristique ultri',
+    'lot-5.jpg',
+    7500,
+    2500,
+    2,
+    4,
+    DATE_SUB(CURDATE(), INTERVAL 4 DAY),
+    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    NULL
+);
+
+/* Добавление ставок для лотов */
+INSERT INTO user_staf (lot_id, user_id, amount, staf_date) VALUES
+(1, 1, 12500, DATE_SUB(NOW(), INTERVAL "0 05:25" DAY_MINUTE)),
+(1, 2, 14000, DATE_SUB(NOW(), INTERVAL "0 10:15" DAY_MINUTE)),
+(1, 1, 13000, DATE_SUB(NOW(), INTERVAL "0 01:25" DAY_MINUTE)),
+(1, 2, 13400, DATE_SUB(NOW(), INTERVAL "0 04:05" DAY_MINUTE)),
+(1, 1, 12200, DATE_SUB(NOW(), INTERVAL "0 23:55" DAY_MINUTE)),
+(1, 2, 15000, DATE_SUB(NOW(), INTERVAL "0 02:00" DAY_MINUTE)),
+(1, 1, 12600, DATE_SUB(NOW(), INTERVAL "0 14:24" DAY_MINUTE)),
+(1, 2, 17000, DATE_SUB(NOW(), INTERVAL "0 05:55" DAY_MINUTE)),
+(1, 1, 12400, DATE_SUB(NOW(), INTERVAL "0 03:45" DAY_MINUTE)),
+(2, 1, 12500, DATE_SUB(NOW(), INTERVAL "0 05:25" DAY_MINUTE)),
+(3, 2, 14000, DATE_SUB(NOW(), INTERVAL "0 10:15" DAY_MINUTE)),
+(4, 1, 13000, DATE_SUB(NOW(), INTERVAL "0 01:25" DAY_MINUTE)),
+(4, 2, 13400, DATE_SUB(NOW(), INTERVAL "0 04:05" DAY_MINUTE)),
+(6, 1, 14000, DATE_SUB(NOW(), INTERVAL "3 10:15" DAY_MINUTE)),
+(6, 2, 13000, DATE_SUB(NOW(), INTERVAL "4 01:25" DAY_MINUTE)),
+(6, 1, 13400, DATE_SUB(NOW(), INTERVAL "4 04:05" DAY_MINUTE)),
+(5, 1, 14000, DATE_SUB(NOW(), INTERVAL "3 10:15" DAY_MINUTE)),
+(5, 2, 13000, DATE_SUB(NOW(), INTERVAL "4 01:25" DAY_MINUTE)),
+(5, 1, 13400, DATE_SUB(NOW(), INTERVAL "4 04:05" DAY_MINUTE)),
+(4, 2, 12200, DATE_SUB(NOW(), INTERVAL "0 23:55" DAY_MINUTE));
+
 /* Выборка списка категорий */
 SELECT id, name, code
     FROM cathegory;

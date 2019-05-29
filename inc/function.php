@@ -14,13 +14,16 @@
   };
   
   /**
-   * Защита от XSS атак. Проверка и удаление специсимволов для строки.
-   *
-   * @param string $str - Обрабатываемая строка.
-   * @return string     - Обработанная строка.
-   */
-  function esc(string $str): string {
-    $text = htmlspecialchars($str);
+ * Защита от XSS атак. Проверка и удаление специсимволов для строки.
+ *
+ * @param string $str - Обрабатываемая строка.
+ * @return string     - Обработанная строка.
+ */
+  function esc($str): string {
+    $text = '';
+    if (!empty($str)) {
+      $text = htmlspecialchars($str);
+    }
     return $text;
   }
   
@@ -66,7 +69,7 @@
    * @param \DateTime $date   - Дата.
    * @return string - Строка с оставшимся временем до полуночи.
    */
-  function get_timer_lelt($date, $is_full = false) {
+  function get_timer_lelt($date, $is_full = false) : string {
     $main_text = '00:00';
     $additionl_text = '';
     
@@ -233,11 +236,13 @@
    * @return string - Наименование класса.
    */
   function get_class_finishing($date) {
-    $time_count = get_time_to($date);
-    $hours = date_interval_format($time_count, '%H');
-    $days = date_interval_format($time_count, '%a');
-    if (($hours + $days*24) < 1) {
-      return 'timer--finishing';
+    if (isset($date)) {
+      $time_count = get_time_to($date);
+      $hours = date_interval_format($time_count, '%H');
+      $days = date_interval_format($time_count, '%a');
+      if (($hours + $days*24) < 1) {
+        return 'timer--finishing';
+      }
     }
     return '';
   };
@@ -266,11 +271,11 @@
    * Формирует страницу с ошибкой и прекращает выполнения сценария.
    *
    * @param string $error_text   - ошибка.
-   * @param string $title        - название страницы.validation_add_lot
+   * @param string $title        - название страницы.
    * @param string $user_name    - имя  текущего пользователя.
    */
   function render_error_db($error_text, $title, $user_name) {
-    $content = include_template('error.php', ['error' => $error_text]);
+    $content = include_template('error.php', ['content' => $error_text]);
     render_page([], $content, $title, $user_name);
   };
   
@@ -348,27 +353,64 @@
    * @param array $post - данные формы
    * @param array $file - данные файла
    *
-   * @return array -
+   * @return array - массив с ошибками.
    */
-  function validation_add_lot(array $post, array $file) : array {
+  function validation_add_lot($post, $file) : array {
     $required = ['lot-name', 'category', 'message', 'file', 'lot-rate', 'lot-step', 'lot-date'];
     
     foreach ($required as $key) {
       switch ($key) {
+        case 'lot-name':
+          if (empty($post[$key])) {
+            $errors[$key] = 'Введите наименование лота.';
+          } else if (strlen($post[$key]) > 255) {
+            $errors[$key] = 'Длина наименования лота не должна превышать 255 символов!';
+          }
+          break;
+        case 'category':
+          if (empty($post[$key])) {
+            $errors[$key] = 'Выберите категорию.';
+          }
+          break;
+        case 'message':
+          if (empty($post[$key])) {
+            $errors[$key] = 'Введите описание лота.';
+          } else if (strlen($post[$key]) > 1200) {
+            $errors[$key] = 'Длина описания лота не должна превышать 1200 символов!';
+          }
+          break;
         case 'lot-rate':
-          $errors[$key] = empty($post[$key]) || !is_numeric($post[$key]) || $post[$key] <= 0;
+          if (empty($post[$key])) {
+            $errors[$key] = 'Введите Начальную цену.';
+          } else if (!is_numeric($post[$key])) {
+            $errors[$key] = 'Цена должна быть числом!';
+          }
           break;
         case 'lot-step':
-          $errors[$key] = empty($post[$key]) || !is_numeric($post[$key]) || $post[$key] <= 0;
+          if (empty($post[$key])) {
+            $errors[$key] = 'Введите Шаг ставки.';
+          } else if (!is_numeric($post[$key])) {
+            $errors[$key] = 'Шаг ставки должен быть числом!';
+          }
           break;
         case 'lot-date':
-          $errors[$key] = empty($post[$key]) || !is_date_valid($post['lot-date']);
+          if (empty($post[$key])) {
+            $errors[$key] = 'Выберите дату.';
+          } else if (!is_date_valid($post[$key])) {
+            $errors[$key] = 'Дата должна быть в формате ГГГГ-ММ-ДД';
+          } else if (strtotime($post[$key]) <= strtotime(date("Y-m-d"))) {
+            $errors[$key] = 'Указанная дата больше текущей даты, хотя бы на один день.';
+          }
           break;
         case 'file':
-          $errors[$key] = !is_file_valid($file);
+          if (gettype($file) !== 'NULL') {
+            $errors[$key] = (!is_file_valid($file)) ? 'Выберите файл в формате jpg, jpeg, png' : '';
+          } else {
+            $errors[$key] = 'Выберите файл.';
+          }
           break;
         default:
-          $errors[$key] = empty($post[$key]);
+          $errors[$key] = 'Ошибка. Неопределенное поле.';
           break;
       }
     }
@@ -384,10 +426,10 @@
    *
    * @return array - массив с ошибками. При остусвтии ошибок возвращает пустой массив.
    */
-  function validation_signup_lot($DB, array $post) : array {
+  function validation_signup($DB, array $post) : array {
     $errors = [];
-  
-    if (!empty($post['email'])) {
+    
+    if (isset($post['email']) && !empty($post['email'])) {
       if (filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
         $sql = 'SELECT id '
           . 'FROM users '
@@ -404,16 +446,22 @@
       $errors['email'] = 'Введите email пользователя.';
     }
   
-    if (empty($post['name'])) {
-      $errors['name'] = 'Пользователь с данным email уже зарегистрирован.';
+    if (!isset($post['name']) || empty($post['name'])) {
+      $errors['name'] = 'Введите имя пользователя.';
+    } else if (strlen($post['name']) > 128) {
+      $errors['name'] = 'Имя пользователя не должно превышать 128 символов.';
     }
   
-    if (empty($post['password'])) {
+    if (!isset($post['password']) || empty($post['password'])) {
       $errors['password'] = 'Введите пароль.';
+    } else if (strlen($post['password']) > 64) {
+      $errors['password'] = 'Пароль не должен превышать 64 символа.';
     }
   
-    if (empty($post['message'])) {
+    if (!isset($post['message']) || empty($post['message'])) {
       $errors['message'] = 'Введите контактные сведения.';
+    } else if (strlen($post['password']) > 560) {
+      $errors['message'] = 'Контасткные сведения не должны превышать 560 символов.';
     }
     
     return $errors;
@@ -449,10 +497,10 @@
         if (password_verify($post['password'], $user[0]['password'])) {
           $_SESSION['user'] = $user[0];
         } else {
-          $errors['password'] = 'Неверный пароль';
+          $errors['sign_up'] = 'Вы ввели неверный email/пароль';
         }
       } else {
-        $errors['email'] = 'Пользователь не найден';
+        $errors['sign_up'] = 'Вы ввели неверный email/пароль';
       }
     }
     
