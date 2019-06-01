@@ -15,8 +15,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     12000,
     2,
     1,
-    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
-    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -27,8 +27,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     50000,
     1,
     1,
-    DATE_SUB(CURDATE(), INTERVAL 2 DAY),
-    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -39,8 +39,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     1000,
     3,
     2,
-    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
-    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -51,8 +51,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     2000,
     1,
     3,
-    DATE_SUB(CURDATE(), INTERVAL 4 DAY),
-    DATE_ADD(CURDATE(), INTERVAL 2 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -63,8 +63,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     2500,
     2,
     4,
-    DATE_SUB(CURDATE(), INTERVAL 4 DAY),
-    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -75,8 +75,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     1500,
     3,
     6,
-    DATE_SUB(CURDATE(), INTERVAL 5 DAY),
-    DATE_SUB(CURDATE(), INTERVAL 3 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -87,8 +87,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     12000,
     1,
     1,
-    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
-    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -99,8 +99,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     50000,
     2,
     1,
-    DATE_SUB(CURDATE(), INTERVAL 2 DAY),
-    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -111,8 +111,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     1000,
     3,
     2,
-    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
-    DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -123,8 +123,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     2000,
     1,
     3,
-    DATE_SUB(CURDATE(), INTERVAL 4 DAY),
-    DATE_ADD(CURDATE(), INTERVAL 2 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -135,8 +135,8 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     2500,
     2,
     4,
-    DATE_SUB(CURDATE(), INTERVAL 4 DAY),
-    DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 );
 
@@ -257,7 +257,7 @@ INSERT
          1,
          1,
          NOW(),
-         DATE_ADD(NOW(), INTERVAL 1 DAY)
+         DATE_ADD(NOW(), INTERVAL FLOOR(RAND()*(10-5+1)+5) DAY)
      );
 
 /* регистрация нового пользователя */

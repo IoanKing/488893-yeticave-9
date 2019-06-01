@@ -26,7 +26,7 @@
         <div class="lot-item__right">
           <div class="lot-item__state">
             <div class="lot-item__timer timer <?=isset($lot['end_date']) ? get_class_finishing($lot['end_date']) : ''?>">
-              <?=isset($lot['end_date']) ? get_timer_lelt($lot['end_date']) : ''?>
+              <?=isset($lot['end_date']) ? get_timer_lelt($lot['end_date'], true) : ''?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">

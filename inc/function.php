@@ -69,9 +69,8 @@
    * @param \DateTime $date   - Дата.
    * @return string - Строка с оставшимся временем до полуночи.
    */
-  function get_timer_lelt($date, $is_full = false) : string {
-    $main_text = '00:00';
-    $additionl_text = '';
+  function get_timer_lelt($date, $is_short = false) : string {
+    $main_text = 'Торги завершены';
     
     $time_count = get_time_to($date);
     $sign = date_interval_format($time_count, '%r');
@@ -80,12 +79,40 @@
     $days = (!empty($sign)) ? date_interval_format($time_count, '%a') : 0;
     $seconds = (!empty($sign)) ? date_interval_format($time_count, '%S') : 0;
     
+    $count_day = ($days === 0) ? '00' : ($days < 10) ? '0' . $days : $days;
+    $count_hours_left = $hours + $days*24;
+    
     if (!empty($sign)) {
-      $main_text = strval($hours + $days*24) . ":" . strval($minutes);
-      $additionl_text = ($is_full) ? ':' . strval($seconds) : '';
+      if ($is_short) {
+        $main_text = strval($count_hours_left) . ":" . strval($minutes);
+      } else {
+        $main_text = $count_day . ":" . strval($hours) . ':'
+          . strval($minutes);
+      }
     }
     
-    return $main_text . $additionl_text;
+    return $main_text;
+  };
+  
+  /**
+   * Получает оставшиеся время до полуночи и формирует класс finishing если время до полуночи менее часа.
+   *
+   * @param \DateTime $date   - Дата.
+   * @return string - Наименование класса.
+   */
+  function get_class_finishing($date) {
+    if (isset($date)) {
+      $time_count = get_time_to($date);
+      $hours = date_interval_format($time_count, '%H');
+      $days = date_interval_format($time_count, '%a');
+  
+      $count_hours_left = $hours + $days*24;
+      
+      if ($count_hours_left < 24) {
+        return 'timer--finishing';
+      }
+    }
+    return '';
   };
   
   /**
@@ -155,7 +182,10 @@
     if (!empty($sign)) {
       $hours = date_interval_format($time_count, '%H');
       $days = date_interval_format($time_count, '%a');
-      if (($hours + $days*24) < 1) {
+  
+      $count_hours_left = $hours + $days*24;
+      
+      if ($count_hours_left < 24) {
         $result = 'timer--finishing';
       }
     } else {
@@ -182,46 +212,25 @@
     $sign = date_interval_format($time_count, '%r');
     
     if (empty($sign)) {
-      $timer['years'] = date_interval_format($time_count, '%y');
-      $timer['month'] = date_interval_format($time_count, '%m');
-      $timer['days'] = date_interval_format($time_count, '%d');
+      $timer['days'] = date_interval_format($time_count, '%a');
       $timer['hours'] = date_interval_format($time_count, '%h');
       $timer['minutes'] = date_interval_format($time_count, '%i');
     
-      if (intval($timer['years']) > 0) {
-        $result = strval($timer['years']) . ' ' . get_noun_plural_form(
-          intval($timer['years']),
-          "год",
-          "года",
-          "лет"
-        );
-      } else if (intval($timer['month']) > 0) {
-        $result = strval($timer['month']) . ' ' . get_noun_plural_form(
-          intval($timer['month']),
-          "месяц",
-          "месяца",
-          "месяцев"
-        );
-      } else if (intval($timer['days']) > 0) {
-        $result = strval($timer['days']) . ' ' . get_noun_plural_form(
-          intval($timer['days']),
-          "день",
-          "дня",
-          "дней"
-        );
+      if (intval($timer['days']) > 0) {
+        $result = date_format( date_create($date), "d.m.y в H:i");
       } else if (intval($timer['hours']) > 0) {
         $result = strval($timer['hours']) . ' ' . get_noun_plural_form(
           intval($timer['hours']),
-          "час",
-          "часа",
-          "часов"
+          "час назад",
+          "часа назад",
+          "часов назад"
         );
       } else {
         $result = strval($timer['minutes']) . ' ' . get_noun_plural_form(
           intval($timer['minutes']),
-          "минуту",
-          "минуты",
-          "минут"
+          "минуту назад",
+          "минуты назад",
+          "минут назад"
         );
       }
     }
@@ -253,24 +262,6 @@
     }
     return $result;
   }
-  
-  /**
-   * Получает оставшиеся время до полуночи и формирует класс finishing если время до полуночи менее часа.
-   *
-   * @param \DateTime $date   - Дата.
-   * @return string - Наименование класса.
-   */
-  function get_class_finishing($date) {
-    if (isset($date)) {
-      $time_count = get_time_to($date);
-      $hours = date_interval_format($time_count, '%H');
-      $days = date_interval_format($time_count, '%a');
-      if (($hours + $days*24) < 1) {
-        return 'timer--finishing';
-      }
-    }
-    return '';
-  };
   
   /**
    * Формирует страницу отдаваемую пользователю.

@@ -12,7 +12,7 @@
       .'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
       .'WHERE end_date > NOW() OR end_date IS NULL '
       .'GROUP BY l.id, title, description, picture, start_price, staf_step, cathegory, end_date '
-      .'ORDER BY create_date DESC '
+      .'ORDER BY end_date ASC '
       .'LIMIT ? OFFSET ? ',
     'lot_count' => 'SELECT COUNT(*) AS count '
       .'FROM lots AS l '
