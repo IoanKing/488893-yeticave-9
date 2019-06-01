@@ -64,7 +64,7 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     2,
     4,
     DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
-    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -76,7 +76,7 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     3,
     6,
     DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
-    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 ),
 (
@@ -136,7 +136,7 @@ INSERT INTO lots (title, description, picture, start_price, staf_step, user_id, 
     2,
     4,
     DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
-    DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND()*10) DAY),
     NULL
 );
 

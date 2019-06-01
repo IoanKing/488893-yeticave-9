@@ -28,12 +28,12 @@
     'lot_by_cathegory_count' => 'SELECT COUNT(*) AS count '
       .'FROM lots '
       .'WHERE category_id = ? ',
-    'lot_full' => 'SELECT l.id, title, start_price, picture, IFNULL(MAX(s1.amount), start_price) AS price, staf_step, c.name AS cathegory, end_date, description '
+    'lot_full' => 'SELECT l.id, title, start_price, picture, IFNULL(MAX(s1.amount), start_price) AS price, staf_step, c.name AS cathegory, end_date, description, l.user_id '
       .'FROM lots AS l '
       .'JOIN cathegory AS c ON l.category_id = c.id '
       .'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
       .'WHERE l.id = ? '
-      .'GROUP BY id, title, start_price, staf_step, picture, c.name, end_date, description '
+      .'GROUP BY id, title, start_price, staf_step, picture, c.name, end_date, description, l.user_id '
       .'ORDER BY create_date DESC ',
     'lot_by_id' => 'SELECT title, description, picture, start_price, staf_step, c.name AS cathegory '
       .'FROM lots AS l '

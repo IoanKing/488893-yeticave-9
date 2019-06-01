@@ -70,7 +70,7 @@
    * @return string - Строка с оставшимся временем до полуночи.
    */
   function get_timer_lelt($date, $is_short = false) : string {
-    $main_text = 'Торги завершены';
+    $main_text = '00:00:00';
     
     $time_count = get_time_to($date);
     $sign = date_interval_format($time_count, '%r');
@@ -126,8 +126,8 @@
    */
   function get_timer_rate($date, $winner_id, $user_id) {
     $result = '';
-    $time_left = get_timer_lelt($date, true);
-    if ($time_left !== '00:00') {
+    $time_left = get_timer_lelt($date);
+    if ($time_left !== '00:00:00') {
       $result = $time_left;
     } else {
       $result = 'Торги окончены';

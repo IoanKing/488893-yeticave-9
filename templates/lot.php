@@ -37,18 +37,20 @@
                 Мин. ставка <span><?=isset($lot['staf_step']) ? amount_format(floatval($lot['staf_step'])).' ₽' : ''?></span>
               </div>
             </div>
-            <?php if (!empty($user_name) && !$is_user_add_staf && !$is_date_end): ?>
-            <form class="lot-item__form" action="lot.php" method="post" autocomplete="off">
-              <p class="lot-item__form-item form__item <?=(isset($errors['staf'])) ? 'form__item--invalid' : ''?>">
-                <input id="lot_id" type="hidden" name="lot_id" value="<?=isset($lot['id']) ? $lot['id'] : ''?>"
-                <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="<?=amount_format($min_rate)?>">
-                <?php if (isset($errors['staf'])) : ?>
-                    <span class="form__error"><?=$errors['staf']?></span>
-                <?php endif; ?>
-              </p>
-              <button type="submit" class="button">Сделать ставку</button>
-            </form>
+            <?php if (!empty($user_id) && !$is_user_add_staf && !$is_date_end && isset($lot['user_id'])): ?>
+              <?php if ($user_id !== $lot['user_id']) : ?>
+                <form class="lot-item__form" action="lot.php" method="post" autocomplete="off">
+                  <p class="lot-item__form-item form__item <?=(isset($errors['staf'])) ? 'form__item--invalid' : ''?>">
+                    <input id="lot_id" type="hidden" name="lot_id" value="<?=isset($lot['id']) ? $lot['id'] : ''?>"
+                    <label for="cost">Ваша ставка</label>
+                    <input id="cost" type="text" name="cost" placeholder="<?=amount_format($min_rate)?>">
+                    <?php if (isset($errors['staf'])) : ?>
+                        <span class="form__error"><?=$errors['staf']?></span>
+                    <?php endif; ?>
+                  </p>
+                  <button type="submit" class="button">Сделать ставку</button>
+                </form>
+              <?php endif; ?>
             <?php endif; ?>
           </div>
           <div class="history">

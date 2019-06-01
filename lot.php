@@ -121,6 +121,7 @@
       'lot' => $lot[0] ?? [],
       'staf_history' => $staf_history,
       'user_name' => $user_name,
+      'user_id' => $user_id,
       'errors' => $errors,
       'min_rate' => $min_rate,
       'is_user_add_staf' => $is_user_add_staf,

@@ -32,7 +32,7 @@
             <div class="timer <?=get_timer_class($value['end_date'], $value['winner_id'], $user_id)?>"><?=get_timer_rate($value['end_date'], $value['winner_id'], $user_id)?></div>
           </td>
           <td class="rates__price"><?=amount_format(floatval($value['rate'])).' ₽'?></td>
-          <td class="rates__time"><?=get_timer_past($value['staf_date']);?> назад</td>
+          <td class="rates__time"><?=get_timer_past($value['staf_date']);?></td>
         </tr>
         <?php endforeach; ?>
       <?php endif;?>
