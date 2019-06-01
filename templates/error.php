@@ -5,7 +5,7 @@
         </header>
         <article class="gif-list">
             <p class="error">
-              <?=$content?>
+                <?= $content ?>
             </p>
         </article>
     </div>
