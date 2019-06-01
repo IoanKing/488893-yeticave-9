@@ -8,7 +8,7 @@
     render_error_db($errors, $title, $user_name);
   }
   
-  $categories = db_fetch_data($DB, $query_template['cathegory']);
+  $categories = db_fetch_data($DB, isset($query_template['cathegory']) ? $query_template['cathegory'] : '');
   if (gettype($categories) !== "array") {
     render_error_db($categories, $title, $user_name);
   }
@@ -24,12 +24,25 @@
   
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $post = $_POST;
-    $files = $_FILES['file'];
+    $files = isset($_FILES['file']) ? $_FILES['file'] : NULL;
     $errors = validation_add_lot($post, $files);
   
+    $check_cathegory = db_fetch_data(
+      $DB,
+      isset($query_template['cathegory_name_by_id']) ? $query_template['cathegory_name_by_id'] : '',
+      isset($post['category']) ? $post['category'] : ''
+    );
+    if (gettype($check_cathegory) !== "array") {
+      render_error_db($check_cathegory, $title, $user_name);
+    }
+    
+    if (empty($check_cathegory)) {
+      $errors['category'] = 'Данной категории не существует!';
+    }
+    
     $createdate = date_create('now')->format('Y-m-d');
   
-    if (!in_array(true, $errors)) {
+    if (!in_array(true, $errors) && isset($files)) {
       $mimetype = mime_content_type($files['tmp_name']);
       $filename = uniqid() . get_file_type($mimetype);
       $createdate = date_create('now')->format('Y-m-d');
