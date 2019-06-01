@@ -230,6 +230,31 @@
   }
   
   /**
+   * Получает количество ставок и приводит его в читабельный формат.
+   *
+   * @param number $count   - Количество ставок.
+   * @return string         - Строка с количествоv ставок.
+   */
+  function get_staf_count($count) : string {
+    if (empty($count)) {
+      $result = 'Стартовая цена';
+    } else {
+      switch ($count) {
+        case $count === 1:
+          $result = '1 ставка';
+          break;
+        case $count%10 > 1 && $count%10 < 5:
+          $result = $count . ' ставки';
+          break;
+      default:
+        $result = $count . ' ставок';
+        break;
+      }
+    }
+    return $result;
+  }
+  
+  /**
    * Получает оставшиеся время до полуночи и формирует класс finishing если время до полуночи менее часа.
    *
    * @param \DateTime $date   - Дата.

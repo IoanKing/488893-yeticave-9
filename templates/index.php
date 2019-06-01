@@ -32,7 +32,7 @@
                     </h3>
                     <div class="lot__state">
                         <div class="lot__rate">
-                            <span class="lot__amount">Стартовая цена</span>
+                            <span class="lot__amount"><?=get_staf_count($value['count']);?></span>
                             <span class="lot__cost"><?=isset($value['start_price']) ? amount_format(floatval($value['start_price'])).' ₽' : ''?></span>
                         </div>
                         <div class="lot__timer timer <?=isset($value['end_date']) ? get_class_finishing($value['end_date']) : ''?>">
@@ -45,4 +45,15 @@
         <?php endif;?>
         </ul>
     </section>
+  <?php if (count($pagination) > 1) : ?>
+      <ul class="pagination-list">
+          <li class="pagination-item pagination-item-prev"><a href="<?=($page > 1) ? '/index.php?page=' . ($page - 1) : ''?>">Назад</a></li>
+        <?php if ($pagination && !empty($pagination)): ?>
+          <?php foreach ($pagination as $value): ?>
+                <li class="pagination-item <?=($page === $value) ? 'pagination-item-active' : ''?>"><a href="<?=($page !== $value) ? '/index.php?page=' . $value : ''?>"><?=$value?></a></li>
+          <?php endforeach; ?>
+        <?php endif;?>
+          <li class="pagination-item pagination-item-next"><a href="<?=(($page) < count($pagination)) ? '/index.php?page=' . ($page + 1) : ''?>">Вперед</a></li>
+      </ul>
+  <?php endif; ?>
 </main>

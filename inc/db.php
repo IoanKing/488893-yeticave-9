@@ -6,11 +6,19 @@
     'cathegory_name_by_id' => 'SELECT name '
       .'FROM cathegory '
       .'WHERE id = ? ',
-    'lot' => 'SELECT l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date '
+    'lot' => 'SELECT count(s1.id) AS count, l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date '
       .'FROM lots AS l '
       .'JOIN cathegory AS c ON l.category_id = c.id '
+      .'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
       .'WHERE end_date > NOW() OR end_date IS NULL '
-      .'ORDER BY create_date DESC ',
+      .'GROUP BY l.id, title, description, picture, start_price, staf_step, cathegory, end_date '
+      .'ORDER BY create_date DESC '
+      .'LIMIT ? OFFSET ? ',
+    'lot_count' => 'SELECT COUNT(*) AS count '
+      .'FROM lots AS l '
+      .'JOIN cathegory AS c ON l.category_id = c.id '
+      .'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
+      .'WHERE end_date > NOW() OR end_date IS NULL ',
     'lot_by_cathegory' => 'SELECT l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date '
       .'FROM lots AS l '
       .'JOIN cathegory AS c ON l.category_id = c.id '
