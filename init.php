@@ -23,6 +23,10 @@
       && isset($DB_config['password'])
       && isset($DB_config['DB'])
     ) {
-        $DB = init_connection($DB_config['host'], $DB_config['user'],
-          $DB_config['password'], $DB_config['DB']);
+        $DB = init_connection(
+            $DB_config['host'],
+            $DB_config['user'],
+            $DB_config['password'],
+            $DB_config['DB']
+        );
     }

@@ -46,7 +46,8 @@
                                     <span class="lot__amount"><?= get_staf_count($value['count']); ?></span>
                                     <span class="lot__cost"><?= isset($value['start_price'])
                                           ? amount_format(floatval($value['start_price']))
-                                          . ' ₽' : '' ?></span>
+                                          . '<b class="rub">₽</b>'
+                                          : '' ?></span>
                                 </div>
                                 <div class="lot__timer timer <?= isset($value['end_date'])
                                   ? get_class_finishing($value['end_date'])

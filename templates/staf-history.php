@@ -6,7 +6,7 @@
                 <td class="history__name"><?= isset($value['name'])
                       ? esc($value['name']) : '' ?></td>
                 <td class="history__price"><?= isset($value['amount'])
-                      ? amount_format(floatval($value['amount'])) . ' ₽'
+                      ? amount_format(floatval($value['amount'])) . ' р'
                       : '' ?></td>
                 <td class="history__time"><?= isset($value['staf_date'])
                       ? get_timer_past($value['staf_date']) : '' ?></td>

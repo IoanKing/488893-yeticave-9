@@ -1,16 +1,6 @@
 <main>
     <nav class="nav">
-        <ul class="nav__list container">
-            <?php if ($cathegory && !empty($cathegory)): ?>
-                <?php foreach ($cathegory as $value): ?>
-                    <li class="nav__item">
-                        <a href="/cathegory.php?id=<?= isset($value['id'])
-                          ? esc($value['id']) : '' ?>"><?= isset($value['name'])
-                              ? esc($value['name']) : '' ?></a>
-                    </li>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </ul>
+        <?= $nav_list ?>
     </nav>
     <div class="container">
         <section class="lots">
@@ -37,7 +27,7 @@
                                 </h3>
                                 <div class="lot__state">
                                     <div class="lot__rate">
-                                        <span class="lot__amount">Стартовая цена</span>
+                                        <span class="lot__amount"><?= get_staf_count($value['count']); ?></span>
                                         <span class="lot__cost"><?= isset($value['start_price'])
                                               ? amount_format(floatval($value['start_price']))
                                               . ' ₽' : '' ?></span>

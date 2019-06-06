@@ -38,9 +38,12 @@
               $message,
               $create_date
             ];
-            $create_lot = db_insert_data($DB,
-              isset($query_template['sign-up']) ? $query_template['sign-up']
-                : '', $arguments);
+            $create_lot = db_insert_data(
+                $DB,
+                isset($query_template['sign-up']) ? $query_template['sign-up']
+                : '',
+                $arguments
+            );
             
             if (gettype($create_lot) === 'string') {
                 render_error_db($create_lot, $title, $user_name);
@@ -50,14 +53,18 @@
         }
     }
     
+    $nav_list = include_template('nav-list.php', [
+      'cathegory' => $categories,
+      'cathegory_id' => isset($cathegory_id) ? $cathegory_id : null,
+    ]);
+    
     $content = include_template(
-      'sign-up.php', [
-        'cathegory' => $categories ?? [],
+        'sign-up.php',
+        [
         'post' => $post,
         'error' => $errors,
+        'nav_list' => $nav_list,
       ]
     );
     
-    render_page($categories, $content, $title, $user_name);
-  
-  
+    render_page($content, $title, $user_name, $nav_list);

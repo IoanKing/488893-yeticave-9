@@ -1,26 +1,23 @@
 <main>
     <nav class="nav">
-        <ul class="nav__list container">
-            <?php if ($cathegory && !empty($cathegory)): ?>
-                <?php foreach ($cathegory as $value): ?>
-                    <li class="nav__item">
-                        <a href="/cathegory.php?id=<?= isset($value['id'])
-                          ? esc($value['id']) : '' ?>"><?= isset($value['name'])
-                              ? esc($value['name']) : '' ?></a>
-                    </li>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </ul>
+        <?= $nav_list ?>
     </nav>
     <section class="rates container">
         <h2>Мои ставки</h2>
         <table class="rates__list">
             <?php if ($user_rates && !empty($user_rates)): ?>
                 <?php foreach ($user_rates as $value): ?>
-                    <tr class="rates__item <?= (isset($value['end_date'])
-                      && isset($value['winner_id']))
-                      ? get_bets_class($value['end_date'], $value['winner_id'],
-                        $user_id) : '' ?>">
+                    <?php
+                    $end_date = isset($value['end_date']) ? $value['end_date']
+                      : '';
+                    $winner_id = isset($value['winner_id'])
+                      ? $value['winner_id'] : '';
+                    ?>
+                    <tr class="rates__item <?= get_bets_class(
+                        $end_date,
+                        $winner_id,
+                        $user_id
+                    ) ?>">
                         <td class="rates__info">
                             <div class="rates__img">
                                 <img src="/uploads/<?= isset($value['picture'])
@@ -41,10 +38,15 @@
                         </td>
                         <td class="rates__category"><?= $value['cathegory'] ?></td>
                         <td class="rates__timer">
-                            <div class="timer <?= get_timer_class($value['end_date'],
-                              $value['winner_id'],
-                              $user_id) ?>"><?= get_timer_rate($value['end_date'],
-                                  $value['winner_id'], $user_id) ?></div>
+                            <div class="timer <?= get_timer_class(
+                                    $value['end_date'],
+                                    $value['winner_id'],
+                                    $user_id
+                            ) ?>"><?= get_timer_rate(
+                                $value['end_date'],
+                                $value['winner_id'],
+                                $user_id
+                                ) ?></div>
                         </td>
                         <td class="rates__price"><?= amount_format(floatval($value['rate']))
                             . ' ₽' ?></td>

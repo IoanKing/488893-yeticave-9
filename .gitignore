@@ -5,6 +5,7 @@
 *.pdf
 *.psd
 *.sublime*
+*.cache
 Thumbs.db
 vendor
 uploads/*

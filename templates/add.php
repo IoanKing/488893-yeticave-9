@@ -1,16 +1,6 @@
 <main>
     <nav class="nav">
-        <ul class="nav__list container">
-            <?php if ($cathegory && !empty($cathegory)): ?>
-                <?php foreach ($cathegory as $value): ?>
-                    <li class="nav__item">
-                        <a href="/cathegory.php?id=<?= isset($value['id'])
-                          ? esc($value['id']) : '' ?>"><?= isset($value['name'])
-                              ? esc($value['name']) : '' ?></a>
-                    </li>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </ul>
+        <?= $nav_list ?>
     </nav>
     <form class="form form--add-lot container <?= (!empty($errors))
       ? 'form--invalid' : '' ?>" action="add.php" method="post"

@@ -56,17 +56,7 @@
 
 <footer class="main-footer">
     <nav class="nav">
-        <ul class="nav__list container">
-            <?php if ($cathegory && !empty($cathegory)): ?>
-                <?php foreach ($cathegory as $value): ?>
-                    <li class="nav__item">
-                        <a href="/cathegory.php?id=<?= isset($value['id'])
-                          ? esc($value['id']) : '' ?>"><?= isset($value['name'])
-                              ? esc($value['name']) : '' ?></a>
-                    </li>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </ul>
+        <?= $nav_list ?>
     </nav>
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">

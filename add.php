@@ -1,5 +1,5 @@
 <?php
-    require_once(__DIR__ . '\init.php');
+    require_once(__DIR__ . '/init.php');
     
     $title = 'Добавление лота';
     
@@ -8,15 +8,18 @@
         render_error_db($errors, $title, $user_name);
     }
     
-    $categories = db_fetch_data($DB,
-      isset($query_template['cathegory']) ? $query_template['cathegory'] : '');
+    $categories = db_fetch_data(
+        $DB,
+        isset($query_template['cathegory']) ? $query_template['cathegory'] : ''
+    );
     if (gettype($categories) !== "array") {
         render_error_db($categories, $title, $user_name);
     }
     
     if (empty($user_name)) {
         $content = include_template(
-          '403.php', [
+            '403.php',
+            [
             'cathegory' => $categories ?? [],
           ]
         );
@@ -29,10 +32,10 @@
         $errors = validation_add_lot($post, $files);
         
         $check_cathegory = db_fetch_data(
-          $DB,
-          isset($query_template['cathegory_name_by_id'])
+            $DB,
+            isset($query_template['cathegory_name_by_id'])
             ? $query_template['cathegory_name_by_id'] : '',
-          isset($post['category']) ? $post['category'] : ''
+            isset($post['category']) ? $post['category'] : ''
         );
         if (gettype($check_cathegory) !== "array") {
             render_error_db($check_cathegory, $title, $user_name);
@@ -55,14 +58,17 @@
               $filename,
               isset($post['lot-rate']) ? esc($post['lot-rate']) : '',
               isset($post['lot-step']) ? esc($post['lot-step']) : '',
-              1,
+              $user_id,
               isset($post['category']) ? esc($post['category']) : '',
               $createdate,
               isset($post['lot-date']) ? esc($post['lot-date']) : ''
             ];
-            $create_lot = db_insert_data($DB,
-              isset($query_template['create_lot'])
-                ? $query_template['create_lot'] : '', $arguments);
+            $create_lot = db_insert_data(
+                $DB,
+                isset($query_template['create_lot'])
+                ? $query_template['create_lot'] : '',
+                $arguments
+            );
             
             if (gettype($create_lot) === "string") {
                 render_error_db($create_lot, $title, $user_name);
@@ -73,14 +79,20 @@
         }
     }
     
+    
+    $nav_list = include_template('nav-list.php', [
+      'cathegory' => $categories,
+      'cathegory_id' => isset($cathegory_id) ? $cathegory_id : null,
+    ]);
+    
     $content = include_template(
-      'add.php', [
-        'cathegory' => $categories ?? [],
+        'add.php',
+        [
+        'cathegory' => $categories,
         'post' => $post ?? [],
         'errors' => $errors ?? [],
+        'nav_list' => $nav_list,
       ]
     );
     
-    render_page($categories, $content, $title, $user_name);
-  
-  
+    render_page($content, $title, $user_name, $nav_list);

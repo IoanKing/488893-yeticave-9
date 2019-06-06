@@ -14,15 +14,20 @@
         render_error_db($errors, $title, $user_name);
     }
     
-    $categories = db_fetch_data($DB,
-      isset($query_template['cathegory']) ? $query_template['cathegory'] : '');
+    $categories = db_fetch_data(
+        $DB,
+        isset($query_template['cathegory']) ? $query_template['cathegory'] : ''
+    );
     if (gettype($categories) !== "array") {
         render_error_db($categories, $title, $user_name);
     }
     
-    $count_adverts = db_fetch_data($DB,
-      isset($query_template['search_count']) ? $query_template['search_count']
-        : '', $search_phrase);
+    $count_adverts = db_fetch_data(
+        $DB,
+        isset($query_template['search_count']) ? $query_template['search_count']
+        : '',
+        $search_phrase
+    );
     if (gettype($count_adverts) !== "array") {
         render_error_db($count_adverts, $title, $user_name);
     }
@@ -35,23 +40,31 @@
             $offset = ($page - 1) * $limit_per_page;
             $pagination = range(1, $pages_count);
             
-            $adverts = db_fetch_data($DB,
-              isset($query_template['search']) ? $query_template['search'] : '',
-              [$search_phrase, $limit_per_page, $offset]);
+            $adverts = db_fetch_data(
+                $DB,
+                isset($query_template['search']) ? $query_template['search'] : '',
+                [$search_phrase, $limit_per_page, $offset]
+            );
             if (gettype($adverts) !== "array") {
                 render_error_db($adverts, $title, $user_name);
             }
         }
     }
     
+    $nav_list = include_template('nav-list.php', [
+      'cathegory' => $categories,
+      'cathegory_id' => isset($cathegory_id) ? $cathegory_id : null,
+    ]);
+    
     $content = include_template(
-      'search.php', [
-        'cathegory' => $categories ?? [],
+        'search.php',
+        [
         'adverts' => $adverts ?? [],
         'search_phrase' => $search_phrase,
         'page' => $page,
         'pagination' => $pagination,
+        'nav_list' => $nav_list,
       ]
     );
     
-    render_page($categories, $content, $title, $user_name);
+    render_page($content, $title, $user_name, $nav_list);

@@ -25,12 +25,14 @@
     
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $post = $_POST;
-        $lot_id = $post['lot_id'];
-        $new_rate = $post['cost'];
+        $lot_id = isset($post['lot_id']) ? $post['lot_id'] : '';
+        $new_rate = isset($post['cost']) ? $post['cost'] : '';
         
-        $lot = db_fetch_data($DB,
-          isset($query_template['lot_full']) ? $query_template['lot_full'] : '',
-          $lot_id);
+        $lot = db_fetch_data(
+            $DB,
+            isset($query_template['lot_full']) ? $query_template['lot_full'] : '',
+            $lot_id
+        );
         if (gettype($lot) !== "array" && !empty($lot)) {
             render_error_db($lot, $title, $user_name);
         }
@@ -46,9 +48,12 @@
               $createdate,
             ];
             
-            $create_lot = db_insert_data($DB,
-              isset($query_template['add_rate']) ? $query_template['add_rate']
-                : '', $arguments);
+            $create_lot = db_insert_data(
+                $DB,
+                isset($query_template['add_rate']) ? $query_template['add_rate']
+                : '',
+                $arguments
+            );
             if (gettype($create_lot) === "string") {
                 render_error_db($categories, $title, $user_name);
             }
@@ -61,8 +66,8 @@
     }
     
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $lot_id = isset($_GET['id']) ? intval($_GET['id']) : null;
-        $error_code = isset($_GET['error']) ? intval($_GET['error']) : null;
+        $lot_id = isset($_GET['id']) ? intval($_GET['id']) : '';
+        $error_code = isset($_GET['error']) ? intval($_GET['error']) : '';
         if (!empty($error_code)) {
             $errors['staf'] = $error_template[$error_code];
         }
@@ -70,23 +75,27 @@
     
     if (empty($lot_id)) {
         $content = include_template(
-          '404.php', [
+            '404.php',
+            [
             'cathegory' => $categories ?? []
           ]
         );
         render_page($categories, $content, $title, $user_name);
     }
     
-    $lot = db_fetch_data($DB,
-      isset($query_template['lot_full']) ? $query_template['lot_full'] : '',
-      $lot_id);
+    $lot = db_fetch_data(
+        $DB,
+        isset($query_template['lot_full']) ? $query_template['lot_full'] : '',
+        $lot_id
+    );
     if (gettype($lot) !== "array" && !empty($lot)) {
         render_error_db($lot, $title, $user_name);
     }
     
     if (empty($lot)) {
         $content = include_template(
-          '404.php', [
+            '404.php',
+            [
             'cathegory' => $categories ?? [],
           ]
         );
@@ -97,17 +106,23 @@
         $min_rate = $lot[0]['price'] + $lot[0]['staf_step'];
     }
     
-    $rates = db_fetch_data($DB,
-      isset($query_template['staf_history']) ? $query_template['staf_history']
-        : '', $lot_id);
+    $rates = db_fetch_data(
+        $DB,
+        isset($query_template['staf_history']) ? $query_template['staf_history']
+        : '',
+        $lot_id
+    );
     
     if (gettype($rates) !== "array" && !empty($rates)) {
         render_error_db($rates, $title, $user_name);
     }
     
-    $last_user_staf = db_fetch_data($DB,
-      isset($query_template['get_last_user_rate'])
-        ? $query_template['get_last_user_rate'] : '', $lot_id);
+    $last_user_staf = db_fetch_data(
+        $DB,
+        isset($query_template['get_last_user_rate'])
+        ? $query_template['get_last_user_rate'] : '',
+        $lot_id
+    );
     if (gettype($rates) !== "array" && !empty($rates)) {
         render_error_db($last_user_staf, $title, $user_name);
     }
@@ -117,19 +132,24 @@
     }
     
     if (isset($lot[0]['end_date'])) {
-        $is_date_end = (get_timer_lelt($lot[0]['end_date']) === '00:00') ? true
-          : false;
+        $is_date_end = get_timer_lelt($lot[0]['end_date']) === '00:00:00';
     }
     
     $staf_history = include_template(
-      'staf-history.php', [
+        'staf-history.php',
+        [
         'rates' => $rates ?? [],
       ]
     );
     
+    $nav_list = include_template('nav-list.php', [
+      'cathegory' => $categories,
+      'cathegory_id' => isset($cathegory_id) ? $cathegory_id : null,
+    ]);
+    
     $content = include_template(
-      'lot.php', [
-        'cathegory' => $categories ?? [],
+        'lot.php',
+        [
         'lot' => $lot[0] ?? [],
         'staf_history' => $staf_history,
         'user_name' => $user_name,
@@ -137,8 +157,9 @@
         'errors' => $errors,
         'min_rate' => $min_rate,
         'is_user_add_staf' => $is_user_add_staf,
-        'is_date_end' => $is_date_end
+        'is_date_end' => $is_date_end,
+        'nav_list' => $nav_list,
       ]
     );
     
-    render_page($categories, $content, $title, $user_name);
+    render_page($content, $title, $user_name, $nav_list);

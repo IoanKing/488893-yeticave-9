@@ -12,18 +12,20 @@
         . 'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
         . 'WHERE end_date > NOW() OR end_date IS NULL '
         . 'GROUP BY l.id, title, description, picture, start_price, staf_step, cathegory, end_date '
-        . 'ORDER BY end_date ASC '
+        . 'ORDER BY end_date ASC, title ASC, create_date DESC '
         . 'LIMIT ? OFFSET ? ',
       'lot_count' => 'SELECT COUNT(*) AS count '
         . 'FROM lots AS l '
         . 'JOIN cathegory AS c ON l.category_id = c.id '
         . 'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
         . 'WHERE end_date > NOW() OR end_date IS NULL ',
-      'lot_by_cathegory' => 'SELECT l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date '
+      'lot_by_cathegory' => 'SELECT count(s1.id) AS count, l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date '
         . 'FROM lots AS l '
         . 'JOIN cathegory AS c ON l.category_id = c.id '
+        . 'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
         . 'WHERE c.id = ? '
-        . 'ORDER BY create_date DESC '
+        . 'GROUP BY l.id, title, description, picture, start_price, staf_step, cathegory, end_date '
+        . 'ORDER BY end_date ASC, title ASC, create_date DESC '
         . 'LIMIT ? OFFSET ? ',
       'lot_by_cathegory_count' => 'SELECT COUNT(*) AS count '
         . 'FROM lots '
@@ -34,7 +36,7 @@
         . 'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
         . 'WHERE l.id = ? '
         . 'GROUP BY id, title, start_price, staf_step, picture, c.name, end_date, description, l.user_id '
-        . 'ORDER BY create_date DESC ',
+        . 'ORDER BY end_date ASC, title ASC, create_date DESC ',
       'lot_by_id' => 'SELECT title, description, picture, start_price, staf_step, c.name AS cathegory '
         . 'FROM lots AS l '
         . 'JOIN cathegory AS c ON l.category_id = c.id '
@@ -53,7 +55,7 @@
         . 'LEFT JOIN users u ON l.user_id = u.id '
         . 'WHERE s1.user_id = ? AND s1.amount = (SELECT MAX(s2.amount) FROM user_staf AS s2 WHERE s2.user_id = s1.user_id AND s2.lot_id = l.id) '
         . 'GROUP BY lot_id, title, contact, staf_date, picture, cathegory, end_date, description, rate, winner_id '
-        . 'ORDER BY s1.staf_date DESC ',
+        . 'ORDER BY end_date DESC, title ASC',
       'create_lot' => 'INSERT '
         . 'INTO lots '
         . '(title, description, picture, start_price, staf_step, user_id, category_id, create_date, end_date) VALUES '
@@ -80,10 +82,13 @@
       'search_count' => 'SELECT COUNT(*) AS count '
         . 'FROM lots '
         . 'WHERE MATCH(title, description) AGAINST(? IN BOOLEAN MODE) ',
-      'search' => 'SELECT l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date '
+      'search' => 'SELECT count(s1.id) AS count, l.id, title, description, picture, start_price, staf_step, c.name AS cathegory, end_date '
         . 'FROM lots AS l '
         . 'JOIN cathegory AS c ON l.category_id = c.id '
+        . 'LEFT JOIN user_staf s1 ON s1.lot_id = l.id '
         . 'WHERE MATCH(title, description) AGAINST(? IN BOOLEAN MODE) '
+        . 'GROUP BY l.id, title, description, picture, start_price, staf_step, cathegory, end_date '
+        . 'ORDER BY end_date ASC, title ASC, create_date DESC '
         . 'LIMIT ? OFFSET ? ',
       'get_winner' => 'SELECT l.id AS id, s1.user_id AS user, l.title  '
         . 'FROM lots AS l '
@@ -109,13 +114,17 @@
      * @return false|mysqli
      */
     function init_connection(
-      string $host_name,
-      string $user_name,
-      string $pass,
-      string $database_name
+        string $host_name,
+        string $user_name,
+        string $pass,
+        string $database_name
     ) {
-        $connect = mysqli_connect($host_name, $user_name, $pass,
-          $database_name);
+        $connect = mysqli_connect(
+            $host_name,
+            $user_name,
+            $pass,
+            $database_name
+        );
         mysqli_set_charset($connect, "utf8");
         return $connect;
     }
@@ -275,5 +284,5 @@
             return mysqli_stmt_error($stmt);
         }
         
-        return true;
+        return '';
     }

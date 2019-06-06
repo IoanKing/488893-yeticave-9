@@ -76,7 +76,8 @@
     /**
      * Получает оставшиеся время до полуночи и приводит его в читабельный формат H:I
      *
-     * @param DateTime $date - Дата.
+     * @param DateTime $date     - Дата.
+     * @param bool     $is_short - признак короткого формата оставшегося времени.
      *
      * @return string - Строка с оставшимся временем до полуночи.
      */
@@ -90,15 +91,14 @@
           : 0;
         $hours = (!empty($sign)) ? date_interval_format($time_count, '%H') : 0;
         $days = (!empty($sign)) ? date_interval_format($time_count, '%a') : 0;
-        $seconds = (!empty($sign)) ? date_interval_format($time_count, '%S')
-          : 0;
         
         $count_day = ($days === 0) ? '00' : ($days < 10) ? '0' . $days : $days;
         $count_hours_left = $hours + $days * 24;
         
         if (!empty($sign)) {
             if ($is_short) {
-                $main_text = strval($count_hours_left) . ":" . strval($minutes);
+                $main_text = (($count_hours_left < 10) ? '0' . $count_hours_left
+                    : $count_hours_left) . ':' . strval($minutes);
             } else {
                 $main_text = $count_day . ":" . strval($hours) . ':'
                   . strval($minutes);
@@ -121,8 +121,11 @@
     {
         if (isset($date)) {
             $time_count = get_time_to($date);
-            $hours = date_interval_format($time_count, '%H');
-            $days = date_interval_format($time_count, '%a');
+            $sign = date_interval_format($time_count, '%r');
+            $hours = (!empty($sign)) ? date_interval_format($time_count, '%H')
+              : 0;
+            $days = (!empty($sign)) ? date_interval_format($time_count, '%a')
+              : 0;
             
             $count_hours_left = $hours + $days * 24;
             
@@ -138,7 +141,7 @@
     /**
      * Формирует статус завершения ставок по лоту.
      *
-     * @param $end_date  - дата окончания торгов.
+     * @param $date      - дата окончания торгов.
      * @param $winner_id - идентификатор победителя.
      * @param $user_id   - идентификатор пользователя.
      *
@@ -146,7 +149,6 @@
      */
     function get_timer_rate($date, $winner_id, $user_id)
     {
-        $result = '';
         $time_left = get_timer_lelt($date);
         if ($time_left !== '00:00:00') {
             $result = $time_left;
@@ -247,18 +249,18 @@
                 if (intval($timer['hours']) > 0) {
                     $result = strval($timer['hours']) . ' '
                       . get_noun_plural_form(
-                        intval($timer['hours']),
-                        "час назад",
-                        "часа назад",
-                        "часов назад"
+                          intval($timer['hours']),
+                          "час назад",
+                          "часа назад",
+                          "часов назад"
                       );
                 } else {
                     $result = strval($timer['minutes']) . ' '
                       . get_noun_plural_form(
-                        intval($timer['minutes']),
-                        "минуту назад",
-                        "минуты назад",
-                        "минут назад"
+                          intval($timer['minutes']),
+                          "минуту назад",
+                          "минуты назад",
+                          "минут назад"
                       );
                 }
             }
@@ -297,18 +299,18 @@
     /**
      * Формирует страницу отдаваемую пользователю.
      *
-     * @param array  $categories - массив с категориями.
-     * @param string $content    - основной контент страницы.
-     * @param string $title      - название страницы.
-     * @param string $user_name  - имя  текущего пользователя.
+     * @param string $content   - основной контент страницы.
+     * @param string $title     - название страницы.
+     * @param string $user_name - имя  текущего пользователя.
+     * @param string $nav_list  - контент с меню навигации (категории).
      */
-    function render_page($categories, $content, $title, $user_name)
+    function render_page($content, $title, $user_name, $nav_list = '')
     {
         $layout = include_template('layout.php', [
-          'cathegory' => $categories,
           'content' => $content,
           'title' => $title,
           'user_name' => $user_name,
+          'nav_list' => $nav_list,
         ]);
         
         print($layout);
@@ -327,7 +329,7 @@
     function render_error_db($error_text, $title, $user_name)
     {
         $content = include_template('error.php', ['content' => $error_text]);
-        render_page([], $content, $title, $user_name);
+        render_page($content, $title, $user_name);
     }
     
     ;
@@ -358,8 +360,7 @@
     /**
      * Проверяет корректность формата загружаемых изображений.
      *
-     * @param array  $file - Массив в данными файла.
-     * @param string $key  - наименование параметра.
+     * @param array $file - Массив в данными файла.
      *
      * @return boolean
      */
@@ -417,6 +418,7 @@
      */
     function validation_add_lot($post, $file): array
     {
+        $errors = [];
         $required = [
           'lot-name',
           'category',
@@ -658,10 +660,10 @@
      * @return string Рассчитанная форма множественнго числа
      */
     function get_noun_plural_form(
-      int $number,
-      string $one,
-      string $two,
-      string $many
+        int $number,
+        string $one,
+        string $two,
+        string $many
     ): string {
         $number = (int)$number;
         $mod10 = $number % 10;

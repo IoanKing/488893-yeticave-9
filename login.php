@@ -23,12 +23,18 @@
         }
     }
     
+    $nav_list = include_template('nav-list.php', [
+      'cathegory' => $categories,
+      'cathegory_id' => isset($cathegory_id) ? $cathegory_id : null,
+    ]);
+    
     $content = include_template(
-      'login.php', [
-        'cathegory' => $categories ?? [],
+        'login.php',
+        [
         'post' => $post,
         'error' => $errors,
+        'nav_list' => $nav_list,
       ]
     );
     
-    render_page($categories, $content, $title, $user_name);
+    render_page($content, $title, $user_name, $nav_list);
